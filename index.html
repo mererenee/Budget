@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kline-Nall Budget 2026</title>
+  <link rel="stylesheet" href="src/styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">Kline-Nall <span>Budget</span></div>
+    <nav id="nav">
+      <button class="on" data-tab="dashboard">Dashboard</button>
+      <button data-tab="import">Import</button>
+      <button data-tab="budget">Budget</button>
+      <button data-tab="goals">Goals</button>
+      <button data-tab="debt">Debt</button>
+      <button data-tab="invest">Invest</button>
+      <button data-tab="house">Projects</button>
+      <button data-tab="rules">Auto-Cat</button>
+      <button data-tab="sheets">Google Sheets</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="tab-dashboard" class="tab on"></div>
+    <div id="tab-import" class="tab"></div>
+    <div id="tab-budget" class="tab"></div>
+    <div id="tab-goals" class="tab"></div>
+    <div id="tab-debt" class="tab"></div>
+    <div id="tab-invest" class="tab"></div>
+    <div id="tab-house" class="tab"></div>
+    <div id="tab-rules" class="tab"></div>
+    <div id="tab-sheets" class="tab"></div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="src/data.js"></script>
+  <script src="src/rules.js"></script>
+  <script src="src/categorizer.js"></script>
+  <script src="src/storage.js"></script>
+  <script src="src/sheets.js"></script>
+  <script src="src/tabs/dashboard.js"></script>
+  <script src="src/tabs/import.js"></script>
+  <script src="src/tabs/budget.js"></script>
+  <script src="src/tabs/goals.js"></script>
+  <script src="src/tabs/debt.js"></script>
+  <script src="src/tabs/invest.js"></script>
+  <script src="src/tabs/house.js"></script>
+  <script src="src/tabs/rules.js"></script>
+  <script src="src/tabs/sheets.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
