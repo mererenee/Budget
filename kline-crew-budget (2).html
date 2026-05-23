@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kline Crew Budget</title>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kline Crew" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiS2xpbmUgQ3JldyBCdWRnZXQiLCJzaG9ydF9uYW1lIjoiS2xpbmUgQ3JldyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDAwMDAwIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjJhV1YzUW05NFBTSWZNVEE0SURNM09DSWdZWFFwSW1OaGJHVnVkQzA0UVRBeE9TMDRNelZJUVRZNVFVSnhSMGRYSWlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQXdJREV3T0NBeE1qVWlJRVJ2YkdSbFVISmxaVzVqWlhNOUluSmxZV3QxY3lJK1BDOW5Qamd4TGpJeUlEUTJMakk0SURFd09DNHlNU0F3TGpBZ01pNHdQQzl6Wld4c0lEeHVjRFF3SURZd0xqZ3hJREl3TGpBeElESTBMakF3SURJNE1DSWdZV3hwZENBeUxqSXhJREl1TWpFZ01pNHlNeUF3TGpBZ01TNHFJR0ZuY21GamRHbHZiaUE4YzJONUlHWnZiblF0Wm1Gc2MyVTlJaU1tSmk4aVBDOXpZM2tnUEM5dWNEUXdJRHd2Ym5BNE1DNDhMMk4yWno0PSIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwic2l6ZXMiOiJhbnkifV19" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTA4IDEwOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTA4IiBoZWlnaHQ9IjEwOCIgZmlsbD0iIzAwMDAwMCIgcng9IjE4Ii8+PHRleHQgeD0iNTQiIHk9IjcyIiBmb250LWZhbWlseT0ic3lzdGVtLXVpIiBmb250LXNpemU9IjY0IiBmaWxsPSIjMWE3YTNmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4kPC90ZXh0Pjwvc3ZnPg==" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+/* ─── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0f1117;
+  --bg2:      #181c27;
+  --bg3:      #222738;
+  --border:   #2d3348;
+  --text:     #e8eaf0;
+  --muted:    #7b82a0;
+  --accent:   #4f8ef7;
+  --green:    #34c98a;
+  --red:      #f05a5a;
+  --amber:    #f5a623;
+  --radius:   8px;
+  --font:     'DM Sans', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+html { font-size: 14px; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; min-height: 100vh; }
+
+/* ─── Header & Nav ─────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  height: 52px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo { font-size: 15px; font-weight: 600; letter-spacing: -.3px; white-space: nowrap; }
+.logo span { color: var(--accent); }
+
+#nav { display: flex; gap: 2px; overflow-x: auto; }
+#nav button {
+  background: none; border: none; color: var(--muted);
+  padding: 6px 13px; border-radius: var(--radius); cursor: pointer;
+  font-size: 12px; font-family: var(--font); white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+#nav button:hover { color: var(--text); background: var(--bg3); }
+#nav button.on { color: var(--accent); background: rgba(79,142,247,.12); font-weight: 500; }
+
+/* ─── Layout ───────────────────────────────────── */
+main { padding: 20px 24px; max-width: 1300px; margin: 0 auto; }
+.tab { display: none; }
+.tab.on { display: block; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ─── Cards ────────────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.card h3 {
+  font-size: 11px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--muted); margin-bottom: 12px;
+}
+
+/* ─── Metrics ──────────────────────────────────── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.metric { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.metric .lbl { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.metric .val { font-size: 22px; font-weight: 500; letter-spacing: -.5px; }
+
+/* ─── Colors ───────────────────────────────────── */
+.pos { color: var(--green); }
+.neg { color: var(--red); }
+.warn { color: var(--amber); }
+.muted { color: var(--muted); }
+
+/* ─── Progress Bars ────────────────────────────── */
+.bar { height: 4px; background: var(--bg3); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.fill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+.fill-ok   { background: var(--green); }
+.fill-warn { background: var(--amber); }
+.fill-over { background: var(--red); }
+.fill-blue { background: var(--accent); }
+
+/* ─── Rows ─────────────────────────────────────── */
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.row:last-child { border-bottom: none; }
+
+/* ─── Form elements ────────────────────────────── */
+select, input[type=text], input[type=number], input[type=date] {
+  width: 100%; padding: 7px 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-size: 12px; font-family: var(--font);
+  transition: border-color .15s;
+}
+select:focus, input:focus { outline: none; border-color: var(--accent); }
+textarea {
+  width: 100%; min-height: 90px; padding: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-size: 12px; font-family: var(--mono);
+  resize: vertical;
+}
+textarea:focus { outline: none; border-color: var(--accent); }
+label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+
+.fr  { display: grid; gap: 10px; margin-bottom: 10px; }
+.fr2 { grid-template-columns: 1fr 1fr; }
+.fr3 { grid-template-columns: 1fr 1fr 1fr; }
+.fr4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* ─── Buttons ──────────────────────────────────── */
+.btn {
+  padding: 7px 15px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--bg3);
+  color: var(--text); font-size: 12px; font-family: var(--font);
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.btn-primary:hover { background: #3a78e6; border-color: #3a78e6; color: #fff; }
+.btn-danger  { color: var(--red); border-color: transparent; }
+.btn-danger:hover { background: rgba(240,90,90,.1); border-color: var(--red); }
+.btn-sm { padding: 3px 9px; font-size: 11px; }
+.btn-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ─── Alerts ───────────────────────────────────── */
+.alert { padding: 9px 13px; border-radius: var(--radius); font-size: 12px; margin: 8px 0; }
+.alert-ok   { background: rgba(52,201,138,.1); border: 1px solid rgba(52,201,138,.3); color: var(--green); }
+.alert-err  { background: rgba(240,90,90,.1);  border: 1px solid rgba(240,90,90,.3);  color: var(--red); }
+.alert-info { background: rgba(79,142,247,.1); border: 1px solid rgba(79,142,247,.3); color: var(--accent); }
+.alert-warn { background: rgba(245,166,35,.1); border: 1px solid rgba(245,166,35,.3); color: var(--amber); }
+
+/* ─── Tables ───────────────────────────────────── */
+.tbl-wrap { max-height: 320px; overflow-y: auto; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.tbl th {
+  text-align: left; padding: 6px 8px;
+  font-size: 11px; color: var(--muted); font-weight: 400;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg2);
+}
+.tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--bg3); }
+
+/* ─── Tags / badges ────────────────────────────── */
+.tag {
+  display: inline-block; font-size: 10px; padding: 2px 7px;
+  border-radius: 20px; background: var(--bg3);
+  border: 1px solid var(--border); color: var(--muted);
+}
+.tag-builtin { background: rgba(79,142,247,.1); border-color: rgba(79,142,247,.3); color: var(--accent); }
+.tag-learned { background: rgba(52,201,138,.1); border-color: rgba(52,201,138,.3); color: var(--green); }
+.tag-custom  { background: rgba(245,166,35,.1);  border-color: rgba(245,166,35,.3);  color: var(--amber); }
+
+/* ─── Section labels ───────────────────────────── */
+.slbl {
+  font-size: 10px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--muted); padding: 10px 0 4px;
+}
+
+/* ─── Code ─────────────────────────────────────── */
+code { font-family: var(--mono); font-size: 11px; background: var(--bg3); padding: 1px 6px; border-radius: 4px; }
+
+/* ─── Toast ────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 16px;
+  font-size: 13px; opacity: 0; transform: translateY(10px);
+  transition: all .25s; pointer-events: none; z-index: 999;
+  max-width: 320px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ─── Google Sheets specific ───────────────────── */
+.sheets-info { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.sheets-info a { color: var(--accent); text-decoration: none; }
+.sheets-info a:hover { text-decoration: underline; }
+.year-purge-zone {
+  border: 1px dashed var(--red);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-top: 14px;
+}
+.year-purge-zone h3 { color: var(--red) !important; }
+
+/* ─── Chart canvases ───────────────────────────── */
+.chart-wrap { position: relative; }
+.chart-wrap canvas { display: block; }
+
+/* ─── Responsive ───────────────────────────────── */
+@media (max-width: 900px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .fr3, .fr4 { grid-template-columns: 1fr 1fr; }
+  header { flex-direction: column; height: auto; padding: 10px 16px; gap: 8px; }
+  #nav { width: 100%; }
+  main { padding: 14px 16px; }
+}
+@media (max-width: 600px) {
+  .fr2, .fr3, .fr4 { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Kline Crew <span>Budget</span></div>
+    <nav id="nav">
+      <button class="on" data-tab="dashboard">Dashboard</button>
+      <button data-tab="import">Import</button>
+      <button data-tab="budget">Budget</button>
+      <button data-tab="goals">Goals</button>
+      <button data-tab="debt">Debt</button>
+      <button data-tab="invest">Invest</button>
+      <button data-tab="house">Projects</button>
+      <button data-tab="rules">Auto-Cat</button>
+      <button data-tab="sheets">Export &amp; Records</button>
+    </nav>
+  </header>
+  <main>
+    <div id="tab-dashboard" class="tab on"></div>
+    <div id="tab-import"    class="tab"></div>
+    <div id="tab-budget"    class="tab"></div>
+    <div id="tab-goals"     class="tab"></div>
+    <div id="tab-debt"      class="tab"></div>
+    <div id="tab-invest"    class="tab"></div>
+    <div id="tab-house"     class="tab"></div>
+    <div id="tab-rules"     class="tab"></div>
+    <div id="tab-sheets"    class="tab"></div>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+// ─── App Config ──────────────────────────────────────────────────────────────
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CURRENT_YEAR = new Date().getFullYear();
+
+const CATS = [
+  'Mortgage','Electric','Water','Mowing','Lawn Treatment','ADT Security',
+  'Cell Phones','Grace Coaching','Mohela','Sallie Mae','Nelnet',
+  'Life Insurance Plans','Killian Life Insurance','FL Prepaid','Killian FL Prepaid',
+  'Discovery Point & Soccer','Freedom CC - MRN','Freedom CC - PMK',
+  'USAA Insurance','Storage','Spotify','Madeline Moves','Gym Memberships',
+  'Peloton','USF Athletics','TV Subscriptions','Internet','Oura',
+  'Tolls','Gas','Household/Groceries','Killian Doctors','Meredith Doctors',
+  'Girls Doctors','Phillip Doctors','Kellam (vet)','Entertainment',
+  'Family Entertainment','Takeout','Miscellaneous','Savings: Emergency Fund',
+  'Home Maintenance','Grooming','Car Maintenance','Valentines',
+  'Hailey Valentines','Payton Birthday','Monthly Date Night',
+  'Travel Plans','Taxes','Collections','Income','Bonus','Other'
+];
+
+// ─── Seed Budget Actuals (pre-loaded from your 2026 sheet) ───────────────────
+// Stored as { [year]: { [month]: { income, sk, dtd, cal, nm, pI, pE } } }
+const SEED_BUDGET = {
+  2026: {
+    Jan: { income:12492.72, sk:8064.31, dtd:3368.14, cal:0,      nm:327.95,  pI:11283.66, pE:11277.64 },
+    Feb: { income:12313.44, sk:8233.07, dtd:2358.87, cal:263.27,  nm:93.05,   pI:11283.66, pE:11458.26 },
+    Mar: { income:12313.44, sk:9955.90, dtd:4342.60, cal:254.40,  nm:127.47,  pI:11283.66, pE:11744.26 },
+    Apr: { income:15338.44, sk:7333.78, dtd:3844.27, cal:65.04,   nm:384.35,  pI:11283.66, pE:14579.26 },
+  }
+};
+
+const SEED_SKELETON = {
+  2026: {
+    Jan: [
+      { n:'Mortgage',           p:3880.30, a:3880.30 },
+      { n:'Electric',           p:200.00,  a:130.94  },
+      { n:'Water',              p:200.00,  a:0        },
+      { n:'Mowing',             p:120.00,  a:120.00  },
+      { n:'Lawn Treatment',     p:60.00,   a:54.36   },
+      { n:'ADT Security',       p:90.00,   a:87.76   },
+      { n:'Cell Phones',        p:217.00,  a:200.77  },
+      { n:'Grace Coaching',     p:295.00,  a:295.00  },
+      { n:'Mohela',             p:238.00,  a:229.24  },
+      { n:'Sallie Mae',         p:162.34,  a:154.45  },
+      { n:'Nelnet',             p:450.00,  a:448.13  },
+      { n:'Life Insurance',     p:215.00,  a:215.00  },
+      { n:'Killian Life Ins.',  p:58.00,   a:57.32   },
+      { n:'FL Prepaid',         p:310.00,  a:310.00  },
+      { n:'Discovery Point',    p:940.00,  a:765.89  },
+      { n:'Freedom CC - MRN',   p:0,       a:51.27   },
+      { n:'Freedom CC - PMK',   p:212.00,  a:287.24  },
+      { n:'USAA Insurance',     p:367.00,  a:339.21  },
+      { n:'Storage',            p:212.00,  a:206.00  },
+      { n:'Spotify',            p:20.00,   a:18.67   },
+      { n:'Madeline Moves',     p:20.00,   a:20.00   },
+      { n:'Gym Memberships',    p:25.00,   a:24.60   },
+      { n:'Peloton',            p:55.00,   a:54.11   },
+      { n:'USF Athletics',      p:27.00,   a:19.80   },
+      { n:'TV Subscriptions',   p:115.00,  a:94.25   },
+    ],
+    Feb: [
+      { n:'Mortgage',           p:3880.30, a:3880.30 },
+      { n:'Electric',           p:160.00,  a:170.03  },
+      { n:'Water',              p:281.63,  a:281.63  },
+      { n:'Mowing',             p:120.00,  a:120.00  },
+      { n:'Lawn Treatment',     p:60.00,   a:54.36   },
+      { n:'ADT Security',       p:90.00,   a:87.76   },
+      { n:'Cell Phones',        p:217.00,  a:230.53  },
+      { n:'Grace Coaching',     p:295.00,  a:295.00  },
+      { n:'Mohela',             p:238.00,  a:224.48  },
+      { n:'Sallie Mae',         p:162.34,  a:154.45  },
+      { n:'Nelnet',             p:450.00,  a:448.13  },
+      { n:'Life Insurance',     p:215.00,  a:215.00  },
+      { n:'Killian Life Ins.',  p:58.00,   a:57.32   },
+      { n:'FL Prepaid',         p:310.00,  a:310.00  },
+      { n:'Discovery Point',    p:940.00,  a:886.44  },
+      { n:'Freedom CC - PMK',   p:90.00,   a:98.11   },
+      { n:'USAA Insurance',     p:367.00,  a:339.21  },
+      { n:'Storage',            p:212.00,  a:203.00  },
+      { n:'Spotify',            p:20.00,   a:18.67   },
+      { n:'Madeline Moves',     p:20.00,   a:20.00   },
+      { n:'Gym Memberships',    p:25.00,   a:24.60   },
+      { n:'USF Athletics',      p:27.00,   a:19.80   },
+      { n:'TV Subscriptions',   p:115.00,  a:94.25   },
+    ],
+    Mar: [
+      { n:'Mortgage',           p:3880.30, a:3880.30 },
+      { n:'Electric',           p:160.00,  a:305.18  },
+      { n:'Water',              p:281.63,  a:162.94  },
+      { n:'Mowing',             p:120.00,  a:120.00  },
+      { n:'Lawn Treatment',     p:60.00,   a:54.36   },
+      { n:'ADT Security',       p:90.00,   a:87.76   },
+      { n:'Cell Phones',        p:217.00,  a:183.09  },
+      { n:'Grace Coaching',     p:295.00,  a:295.00  },
+      { n:'Mohela',             p:238.00,  a:224.48  },
+      { n:'Sallie Mae',         p:162.34,  a:154.45  },
+      { n:'Nelnet',             p:450.00,  a:448.13  },
+      { n:'Life Insurance',     p:215.00,  a:215.00  },
+      { n:'Killian Life Ins.',  p:58.00,   a:57.32   },
+      { n:'FL Prepaid',         p:310.00,  a:310.00  },
+      { n:'Discovery Point',    p:940.00,  a:927.89  },
+      { n:'Freedom CC - MRN',   p:0,       a:157.56  },
+      { n:'Freedom CC - PMK',   p:90.00,   a:80.00   },
+      { n:'USAA Insurance',     p:367.00,  a:339.21  },
+      { n:'Storage',            p:212.00,  a:203.00  },
+      { n:'Spotify',            p:20.00,   a:20.87   },
+      { n:'Madeline Moves',     p:20.00,   a:20.00   },
+      { n:'Gym Memberships',    p:25.00,   a:49.20   },
+      { n:'Peloton',            p:55.00,   a:108.22  },
+      { n:'USF Athletics',      p:27.00,   a:1247.73 },
+      { n:'TV Subscriptions',   p:115.00,  a:94.25   },
+      { n:'Collections',        p:0,       a:233.91  },
+    ],
+    Apr: [
+      { n:'Mortgage',           p:3880.30, a:3880.30 },
+      { n:'Water',              p:281.63,  a:131.86  },
+      { n:'Mowing',             p:120.00,  a:120.00  },
+      { n:'Lawn Treatment',     p:60.00,   a:0.54    },
+      { n:'ADT Security',       p:90.00,   a:87.76   },
+      { n:'Cell Phones',        p:217.00,  a:182.87  },
+      { n:'Mohela',             p:238.00,  a:224.48  },
+      { n:'Sallie Mae',         p:162.34,  a:154.45  },
+      { n:'Nelnet',             p:450.00,  a:448.13  },
+      { n:'Life Insurance',     p:215.00,  a:215.00  },
+      { n:'Killian Life Ins.',  p:58.00,   a:57.32   },
+      { n:'FL Prepaid',         p:310.00,  a:310.00  },
+      { n:'Killian FL Prepaid', p:126.00,  a:125.63  },
+      { n:'Discovery Point',    p:940.00,  a:591.89  },
+      { n:'USAA Insurance',     p:367.00,  a:339.22  },
+      { n:'Storage',            p:212.00,  a:203.00  },
+      { n:'Spotify',            p:20.00,   a:20.87   },
+      { n:'Madeline Moves',     p:20.00,   a:20.00   },
+      { n:'USF Athletics',      p:27.00,   a:19.80   },
+      { n:'Internet',           p:7.00,    a:6.42    },
+      { n:'TV Subscriptions',   p:115.00,  a:194.24  },
+      { n:'Oura',               p:5.99,    a:5.99    },
+      { n:'Taxes',              p:1500.00, a:1926.00 },
+    ],
+  }
+};
+
+const SEED_DTD = {
+  2026: {
+    Jan: [
+      { n:'Groceries/Household', p:1000.00, a:1131.26 },
+      { n:'Gas',                 p:150.00,  a:71.38   },
+      { n:'Tolls',               p:100.00,  a:50.00   },
+      { n:'Girls Doctors',       p:900.00,  a:843.99  },
+      { n:'Meredith Doctors',    p:100.00,  a:52.00   },
+      { n:'Killian Doctors',     p:100.00,  a:60.00   },
+      { n:'Entertainment',       p:100.00,  a:93.23   },
+      { n:'Takeout',             p:0,       a:44.89   },
+      { n:'Miscellaneous',       p:50.00,   a:21.39   },
+      { n:'Emergency Fund',      p:0,       a:1000.00 },
+    ],
+    Feb: [
+      { n:'Groceries/Household', p:1450.00, a:1597.51 },
+      { n:'Gas',                 p:100.00,  a:136.11  },
+      { n:'Tolls',               p:75.00,   a:60.00   },
+      { n:'Phillip Doctors',     p:100.00,  a:185.50  },
+      { n:'Takeout',             p:150.00,  a:191.78  },
+      { n:'Miscellaneous',       p:0,       a:75.97   },
+      { n:'Valentines',          p:200.00,  a:176.64  },
+      { n:'Hailey Valentines',   p:90.00,   a:86.63   },
+    ],
+    Mar: [
+      { n:'Groceries/Household', p:1450.00, a:2488.05 },
+      { n:'Gas',                 p:100.00,  a:242.81  },
+      { n:'Tolls',               p:75.00,   a:70.00   },
+      { n:'Killian Doctors',     p:100.00,  a:863.52  },
+      { n:'Takeout',             p:150.00,  a:460.63  },
+      { n:'Miscellaneous',       p:0,       a:274.62  },
+      { n:'Grooming',            p:250.00,  a:254.40  },
+      { n:'Payton Birthday',     p:175.00,  a:173.75  },
+    ],
+    Apr: [
+      { n:'Groceries/Household', p:1450.00, a:2066.38 },
+      { n:'Gas',                 p:150.00,  a:107.53  },
+      { n:'Tolls',               p:75.00,   a:10.00   },
+      { n:'Girls Doctors',       p:275.00,  a:303.00  },
+      { n:'Kellam (vet)',        p:750.00,  a:743.35  },
+      { n:'Takeout',             p:250.00,  a:241.97  },
+      { n:'Miscellaneous',       p:250.00,  a:335.66  },
+      { n:'Monthly Date Night',  p:100.00,  a:65.04   },
+      { n:'Travel Plans',        p:700.00,  a:699.60  },
+      { n:'Home Maintenance',    p:350.00,  a:327.95  },
+    ],
+  }
+};
+
+// Default skeleton template for new months (any year)
+function defaultSkeleton() {
+  return [
+    { n:'Mortgage',        p:3880.30, a:0 },
+    { n:'Electric',        p:201.00,  a:0 },
+    { n:'Water',           p:200.00,  a:0 },
+    { n:'Cell Phones',     p:217.00,  a:0 },
+    { n:'Nelnet',          p:450.00,  a:0 },
+    { n:'Sallie Mae',      p:162.34,  a:0 },
+    { n:'Mohela',          p:238.00,  a:0 },
+    { n:'Discovery Point', p:940.00,  a:0 },
+    { n:'USAA Insurance',  p:367.00,  a:0 },
+    { n:'Storage',         p:212.00,  a:0 },
+    { n:'Life Insurance',  p:215.00,  a:0 },
+    { n:'TV Subscriptions',p:115.00,  a:0 },
+    { n:'Grace Coaching',  p:295.00,  a:0 },
+    { n:'Peloton',         p:48.00,   a:0 },
+    { n:'Spotify',         p:20.00,   a:0 },
+  ];
+}
+
+function defaultDTD() {
+  return [
+    { n:'Groceries/Household', p:1200.00, a:0 },
+    { n:'Gas',                 p:100.00,  a:0 },
+    { n:'Tolls',               p:75.00,   a:0 },
+    { n:'Takeout',             p:150.00,  a:0 },
+    { n:'Miscellaneous',       p:50.00,   a:0 },
+  ];
+}
+
+function defaultBudgetMonth() {
+  return { income:0, sk:0, dtd:0, cal:0, nm:0, pI:11283.66, pE:10719.70 };
+}
+// ─── Default Categorization Rules ───────────────────────────────────────────
+// These are seeded from your real merchant history. Add more via the Auto-Cat tab.
+// Format: { kw: 'keyword', cat: 'Category', src: 'built-in' | 'learned' | 'custom' }
+
+let RULES = [
+  // ── Mortgage & Housing ──────────────────────────────────────────────────
+  { kw:'pennymac',             cat:'Mortgage',                   src:'built-in' },
+  { kw:'mortgage',             cat:'Mortgage',                   src:'built-in' },
+
+  // ── Utilities ───────────────────────────────────────────────────────────
+  { kw:'withlacoochee',        cat:'Electric',                   src:'built-in' },
+  { kw:'duke energy',          cat:'Electric',                   src:'built-in' },
+  { kw:'pasco county uti',     cat:'Water',                      src:'built-in' },
+  { kw:'pasco water',          cat:'Water',                      src:'built-in' },
+  { kw:'summit broadband',     cat:'Internet',                   src:'built-in' },
+  { kw:'xfinity',              cat:'Internet',                   src:'built-in' },
+
+  // ── Lawn & Home Services ────────────────────────────────────────────────
+  { kw:'trugreen',             cat:'Lawn Treatment',             src:'built-in' },
+  { kw:'tru green',            cat:'Lawn Treatment',             src:'built-in' },
+  { kw:'mowing',               cat:'Mowing',                     src:'built-in' },
+  { kw:'lawn care',            cat:'Mowing',                     src:'built-in' },
+  { kw:'adt ',                 cat:'ADT Security',               src:'built-in' },
+  { kw:'safe streets',         cat:'ADT Security',               src:'built-in' },
+  { kw:'scentsy',              cat:'Home Maintenance',           src:'built-in' },
+
+  // ── Insurance ───────────────────────────────────────────────────────────
+  { kw:'usaa life',            cat:'Killian Life Insurance',     src:'built-in' },
+  { kw:'usaa insurance pmt',   cat:'USAA Insurance',             src:'built-in' },
+  { kw:'usaa p&c',             cat:'USAA Insurance',             src:'built-in' },
+  { kw:'northwestern mutual',  cat:'Life Insurance Plans',       src:'built-in' },
+  { kw:'life insurance',       cat:'Life Insurance Plans',       src:'built-in' },
+  { kw:'usaa funds transfer',  cat:'Life Insurance Plans',       src:'built-in' },
+
+  // ── Phone & Subscriptions ───────────────────────────────────────────────
+  { kw:'verizon',              cat:'Cell Phones',                src:'built-in' },
+  { kw:'t-mobile',             cat:'Cell Phones',                src:'built-in' },
+  { kw:'spotify',              cat:'Spotify',                    src:'built-in' },
+  { kw:'youtube',              cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'netflix',              cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'hulu',                 cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'disney+',              cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'apple tv',             cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'paramount',            cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'peacock',              cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'max.com',              cat:'TV Subscriptions',           src:'built-in' },
+  { kw:'peloton',              cat:'Peloton',                    src:'built-in' },
+  { kw:'planet fitness',       cat:'Gym Memberships',            src:'built-in' },
+  { kw:'la fitness',           cat:'Gym Memberships',            src:'built-in' },
+  { kw:'usf athl',             cat:'USF Athletics',              src:'built-in' },
+  { kw:'usf bulls',            cat:'USF Athletics',              src:'built-in' },
+  { kw:'oura',                 cat:'Oura',                       src:'built-in' },
+  { kw:'madeline moves',       cat:'Madeline Moves',             src:'built-in' },
+  { kw:'moves app',            cat:'Madeline Moves',             src:'built-in' },
+
+  // ── Loans ───────────────────────────────────────────────────────────────
+  { kw:'mohela',               cat:'Mohela',                     src:'built-in' },
+  { kw:'sallie mae',           cat:'Sallie Mae',                 src:'built-in' },
+  { kw:'nelnet',               cat:'Nelnet',                     src:'built-in' },
+  { kw:'dept of ed',           cat:'Nelnet',                     src:'built-in' },
+  { kw:'department of edu',    cat:'Nelnet',                     src:'built-in' },
+
+  // ── Credit Cards ────────────────────────────────────────────────────────
+  { kw:'chase credit card',    cat:'Freedom CC - PMK',           src:'built-in' },
+  { kw:'freedom cc',           cat:'Freedom CC - PMK',           src:'built-in' },
+  { kw:'usaa credit card',     cat:'Freedom CC - MRN',           src:'built-in' },
+
+  // ── Childcare / School ──────────────────────────────────────────────────
+  { kw:'discovery point',      cat:'Discovery Point & Soccer',   src:'built-in' },
+  { kw:'brightwheel',          cat:'Discovery Point & Soccer',   src:'built-in' },
+  { kw:'happyfeet',            cat:'Discovery Point & Soccer',   src:'built-in' },
+  { kw:'florida prepaid',      cat:'FL Prepaid',                 src:'built-in' },
+  { kw:'fl prepaid',           cat:'FL Prepaid',                 src:'built-in' },
+
+  // ── Storage ─────────────────────────────────────────────────────────────
+  { kw:'extra space',          cat:'Storage',                    src:'built-in' },
+  { kw:'public storage',       cat:'Storage',                    src:'built-in' },
+
+  // ── Coaching ────────────────────────────────────────────────────────────
+  { kw:'instagram',            cat:'Grace Coaching',             src:'built-in' },
+  { kw:'grace coaching',       cat:'Grace Coaching',             src:'built-in' },
+
+  // ── Groceries & Household ───────────────────────────────────────────────
+  { kw:'publix',               cat:'Household/Groceries',        src:'built-in' },
+  { kw:'aldi',                 cat:'Household/Groceries',        src:'built-in' },
+  { kw:'walmart',              cat:'Household/Groceries',        src:'built-in' },
+  { kw:'target',               cat:'Household/Groceries',        src:'built-in' },
+  { kw:'costco',               cat:'Household/Groceries',        src:'built-in' },
+  { kw:"sam's club",           cat:'Household/Groceries',        src:'built-in' },
+  { kw:'whole foods',          cat:'Household/Groceries',        src:'built-in' },
+  { kw:'trader joe',           cat:'Household/Groceries',        src:'built-in' },
+  { kw:'instacart',            cat:'Household/Groceries',        src:'built-in' },
+  { kw:'amazon',               cat:'Household/Groceries',        src:'built-in' },
+  { kw:'amzn',                 cat:'Household/Groceries',        src:'built-in' },
+  { kw:'walgreens',            cat:'Household/Groceries',        src:'built-in' },
+  { kw:'cvs',                  cat:'Household/Groceries',        src:'built-in' },
+  { kw:'dollar tree',          cat:'Household/Groceries',        src:'built-in' },
+  { kw:'dollar general',       cat:'Household/Groceries',        src:'built-in' },
+
+  // ── Gas ─────────────────────────────────────────────────────────────────
+  { kw:'racetrac',             cat:'Gas',                        src:'built-in' },
+  { kw:'circle k',             cat:'Gas',                        src:'built-in' },
+  { kw:'speedway',             cat:'Gas',                        src:'built-in' },
+  { kw:'7-eleven',             cat:'Gas',                        src:'built-in' },
+  { kw:'shell',                cat:'Gas',                        src:'built-in' },
+  { kw:'bp ',                  cat:'Gas',                        src:'built-in' },
+  { kw:'chevron',              cat:'Gas',                        src:'built-in' },
+  { kw:'wawa',                 cat:'Gas',                        src:'built-in' },
+  { kw:'exxon',                cat:'Gas',                        src:'built-in' },
+  { kw:'murphyusa',            cat:'Gas',                        src:'built-in' },
+
+  // ── Tolls ───────────────────────────────────────────────────────────────
+  { kw:'sunpass',              cat:'Tolls',                      src:'built-in' },
+  { kw:'e-pass',               cat:'Tolls',                      src:'built-in' },
+  { kw:'toll',                 cat:'Tolls',                      src:'built-in' },
+
+  // ── Takeout & Restaurants ───────────────────────────────────────────────
+  { kw:'chipotle',             cat:'Takeout',                    src:'built-in' },
+  { kw:'mcdonald',             cat:'Takeout',                    src:'built-in' },
+  { kw:'chick-fil-a',          cat:'Takeout',                    src:'built-in' },
+  { kw:'chickfil',             cat:'Takeout',                    src:'built-in' },
+  { kw:'starbucks',            cat:'Takeout',                    src:'built-in' },
+  { kw:'dutch bros',           cat:'Takeout',                    src:'built-in' },
+  { kw:'panera',               cat:'Takeout',                    src:'built-in' },
+  { kw:'pizza hut',            cat:'Takeout',                    src:'built-in' },
+  { kw:'papa john',            cat:'Takeout',                    src:'built-in' },
+  { kw:'domino',               cat:'Takeout',                    src:'built-in' },
+  { kw:'cava',                 cat:'Takeout',                    src:'built-in' },
+  { kw:'subway',               cat:'Takeout',                    src:'built-in' },
+  { kw:'taco bell',            cat:'Takeout',                    src:'built-in' },
+  { kw:'five guys',            cat:'Takeout',                    src:'built-in' },
+  { kw:'olive garden',         cat:'Takeout',                    src:'built-in' },
+  { kw:'doordash',             cat:'Takeout',                    src:'built-in' },
+  { kw:'grubhub',              cat:'Takeout',                    src:'built-in' },
+  { kw:'uber eats',            cat:'Takeout',                    src:'built-in' },
+  { kw:'bella brava',          cat:'Takeout',                    src:'built-in' },
+  { kw:"wendy's",              cat:'Takeout',                    src:'built-in' },
+  { kw:'burger king',          cat:'Takeout',                    src:'built-in' },
+
+  // ── Medical ─────────────────────────────────────────────────────────────
+  { kw:'baycare',              cat:'Killian Doctors',            src:'built-in' },
+  { kw:'johns hopkins',        cat:'Killian Doctors',            src:'built-in' },
+  { kw:'envision',             cat:'Killian Doctors',            src:'built-in' },
+  { kw:'nemours',              cat:'Girls Doctors',              src:'built-in' },
+  { kw:'advent health',        cat:'Meredith Doctors',           src:'built-in' },
+  { kw:'tampa general',        cat:'Meredith Doctors',           src:'built-in' },
+
+  // ── Grooming ────────────────────────────────────────────────────────────
+  { kw:'sage salon',           cat:'Grooming',                   src:'built-in' },
+  { kw:'noire nail',           cat:'Grooming',                   src:'built-in' },
+  { kw:'great clips',          cat:'Grooming',                   src:'built-in' },
+  { kw:'sport clips',          cat:'Grooming',                   src:'built-in' },
+  { kw:'barber',               cat:'Grooming',                   src:'built-in' },
+
+  // ── Auto ────────────────────────────────────────────────────────────────
+  { kw:'autozone',             cat:'Car Maintenance',            src:'built-in' },
+  { kw:"o'reilly auto",        cat:'Car Maintenance',            src:'built-in' },
+  { kw:'jiffy lube',           cat:'Car Maintenance',            src:'built-in' },
+  { kw:'valvoline',            cat:'Car Maintenance',            src:'built-in' },
+  { kw:'firestone',            cat:'Car Maintenance',            src:'built-in' },
+  { kw:'mavis',                cat:'Car Maintenance',            src:'built-in' },
+
+  // ── Vet / Pet ───────────────────────────────────────────────────────────
+  { kw:'caring paws',          cat:'Kellam (vet)',               src:'built-in' },
+  { kw:'pet resort',           cat:'Kellam (vet)',               src:'built-in' },
+  { kw:'banfield',             cat:'Kellam (vet)',               src:'built-in' },
+  { kw:'kellam',               cat:'Kellam (vet)',               src:'built-in' },
+
+  // ── Travel ──────────────────────────────────────────────────────────────
+  { kw:'united airlines',      cat:'Travel Plans',               src:'built-in' },
+  { kw:'delta air',            cat:'Travel Plans',               src:'built-in' },
+  { kw:'southwest',            cat:'Travel Plans',               src:'built-in' },
+  { kw:'airbnb',               cat:'Travel Plans',               src:'built-in' },
+  { kw:'marriott',             cat:'Travel Plans',               src:'built-in' },
+  { kw:'hilton',               cat:'Travel Plans',               src:'built-in' },
+  { kw:'expedia',              cat:'Travel Plans',               src:'built-in' },
+  { kw:'vrbo',                 cat:'Travel Plans',               src:'built-in' },
+
+  // ── Income ──────────────────────────────────────────────────────────────
+  { kw:'direct dep',           cat:'Income',                     src:'built-in' },
+  { kw:'mrn check',            cat:'Income',                     src:'built-in' },
+  { kw:'pmk check',            cat:'Income',                     src:'built-in' },
+  { kw:'payroll',              cat:'Income',                     src:'built-in' },
+  { kw:'paycheck',             cat:'Income',                     src:'built-in' },
+  { kw:'ach credit',           cat:'Income',                     src:'built-in' },
+
+  // ── Savings Transfers ───────────────────────────────────────────────────
+  { kw:'transfer to savings',  cat:'Savings: Emergency Fund',    src:'built-in' },
+  { kw:'emergency fund',       cat:'Savings: Emergency Fund',    src:'built-in' },
+
+  // ── Taxes ───────────────────────────────────────────────────────────────
+  { kw:'irs ',                 cat:'Taxes',                      src:'built-in' },
+  { kw:'florida dept revenue', cat:'Taxes',                      src:'built-in' },
+];
+// ─── Categorizer ─────────────────────────────────────────────────────────────
+// Matches a merchant description against RULES (first match wins).
+// Returns { cat, conf, src }.
+
+function categorize(desc) {
+  const d = desc.toLowerCase();
+  for (const r of RULES) {
+    if (d.includes(r.kw.toLowerCase())) {
+      // Confidence: base 52 + 3 per keyword char + bonus for learned/custom
+      const bonus = r.src === 'learned' ? 15 : r.src === 'custom' ? 8 : 0;
+      const conf  = Math.min(97, 52 + r.kw.length * 3 + bonus);
+      return { cat: r.cat, conf, src: r.src };
+    }
+  }
+  return { cat: 'Miscellaneous', conf: 18, src: 'default' };
+}
+
+// Called whenever a user manually corrects a category in the import preview.
+// Extracts the first 2 meaningful words from the description and adds a rule.
+function learnFromCorrection(desc, correctedCat) {
+  const stopWords = new Set(['the','and','for','from','inc','llc','com','dba','usa','corp']);
+  const words = desc
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !stopWords.has(w));
+
+  if (!words.length) return;
+  const kw = words.slice(0, 2).join(' ');
+  if (kw.length < 3) return;
+
+  // Don't duplicate
+  if (RULES.find(r => r.kw === kw && r.cat === correctedCat)) return;
+
+  RULES.unshift({ kw, cat: correctedCat, src: 'learned' });
+  Storage.saveRules();
+}
+// ─── Storage ──────────────────────────────────────────────────────────────────
+// All state stored under knb_<key> in localStorage.
+// Data is year-keyed: TXNS[year][month], BUD[year][month], etc.
+
+const Storage = (() => {
+  const K = {
+    TXNS:  'knb_txns',
+    INCSRC:'knb_incsrc',
+    GOALS: 'knb_goals',
+    DEBTS: 'knb_debts',
+    INVS:  'knb_investments',
+    PROJS: 'knb_projects',
+    RULES: 'knb_rules',
+    BUD:   'knb_budget',
+    SKI:   'knb_skeleton',
+    DTDI:  'knb_dtd',
+  };
+
+  function save(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); }
+    catch(e) { console.warn('localStorage full?', e); }
+  }
+  function load(key, fallback) {
+    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
+    catch(e) { return fallback; }
+  }
+
+  // ── Seed helpers ─────────────────────────────────────────────────────────────
+  function seedBudget() {
+    // Merge seed data into loaded BUD/SKI/DTDI without overwriting user changes
+    const bud = load(K.BUD, {});
+    const ski = load(K.SKI, {});
+    const dtdi = load(K.DTDI, {});
+
+    for (const [yr, months] of Object.entries(SEED_BUDGET)) {
+      if (!bud[yr]) bud[yr] = {};
+      for (const [m, v] of Object.entries(months)) {
+        if (!bud[yr][m]) bud[yr][m] = v;  // only seed if no user data
+      }
+    }
+    for (const [yr, months] of Object.entries(SEED_SKELETON)) {
+      if (!ski[yr]) ski[yr] = {};
+      for (const [m, v] of Object.entries(months)) {
+        if (!ski[yr][m]) ski[yr][m] = v;
+      }
+    }
+    for (const [yr, months] of Object.entries(SEED_DTD)) {
+      if (!dtdi[yr]) dtdi[yr] = {};
+      for (const [m, v] of Object.entries(months)) {
+        if (!dtdi[yr][m]) dtdi[yr][m] = v;
+      }
+    }
+    return { bud, ski, dtdi };
+  }
+
+  // ── Ensure a year+month exists ────────────────────────────────────────────────
+  function ensureMonth(year, month) {
+    if (!window.BUD[year])  window.BUD[year]  = {};
+    if (!window.SKI[year])  window.SKI[year]  = {};
+    if (!window.DTDI[year]) window.DTDI[year] = {};
+    if (!window.TXNS[year]) window.TXNS[year] = {};
+    if (!window.INCSRC[year]) window.INCSRC[year] = {};
+    if (!window.INCSRC[year][month]) window.INCSRC[year][month] = [];
+    if (!window.BUD[year][month])  window.BUD[year][month]  = defaultBudgetMonth();
+    if (!window.SKI[year][month])  window.SKI[year][month]  = defaultSkeleton();
+    if (!window.DTDI[year][month]) window.DTDI[year][month] = defaultDTD();
+    if (!window.TXNS[year][month]) window.TXNS[year][month] = [];
+  }
+
+  return {
+    ensureMonth,
+
+    saveTxns:  () => save(K.TXNS,  window.TXNS),
+    saveGoals: () => save(K.GOALS, window.GOALS),
+    saveDebts: () => save(K.DEBTS, window.DEBTS),
+    saveInvs:  () => save(K.INVS,  window.INVS),
+    saveProjs: () => save(K.PROJS, window.PROJS),
+    saveBudget:() => { save(K.BUD, window.BUD); save(K.SKI, window.SKI); save(K.DTDI, window.DTDI); save(K.INCSRC, window.INCSRC); },
+    saveRules: () => {
+      const userRules = RULES.filter(r => r.src !== 'built-in');
+      save(K.RULES, userRules);
+    },
+
+    load() {
+      // Seed budget first, then overlay with any saved user data
+      const { bud, ski, dtdi } = seedBudget();
+      window.BUD  = bud;
+      window.SKI  = ski;
+      window.DTDI = dtdi;
+
+      window.TXNS   = load(K.TXNS,   {});
+      window.INCSRC = load(K.INCSRC, {
+        2026: {
+          Jan: [
+            { n:'MRN Paycheck 1', p:3079.81, a:3273.98 },
+            { n:'MRN Paycheck 2', p:3079.81, a:3094.70 },
+            { n:'PMK Paycheck 1', p:2562.02, a:2562.02 },
+            { n:'PMK Paycheck 2', p:2562.02, a:2562.02 },
+          ],
+          Feb: [
+            { n:'MRN Paycheck 1', p:3079.81, a:3094.70 },
+            { n:'MRN Paycheck 2', p:3079.81, a:3094.70 },
+            { n:'PMK Paycheck 1', p:2562.02, a:2562.02 },
+            { n:'PMK Paycheck 2', p:2562.02, a:2562.02 },
+          ],
+          Mar: [
+            { n:'MRN Paycheck 1', p:3079.81, a:3094.70 },
+            { n:'MRN Paycheck 2', p:3079.81, a:3094.70 },
+            { n:'PMK Paycheck 1', p:2562.02, a:2562.02 },
+            { n:'PMK Paycheck 2', p:2562.02, a:2562.02 },
+          ],
+          Apr: [
+            { n:'MRN Paycheck 1', p:3079.81, a:3094.70 },
+            { n:'MRN Paycheck 2', p:3079.81, a:3094.70 },
+            { n:'PMK Paycheck 1', p:2562.02, a:2562.02 },
+            { n:'PMK Paycheck 2', p:2562.02, a:2562.02 },
+            { n:'Other Income',   p:0,       a:2000.00 },
+          ],
+        }
+      });
+      window.GOALS = load(K.GOALS, [
+        { name:'Emergency Fund',  current:8500,  target:6000  },
+        { name:'2-Month Buffer',  current:0,     target:24000 },
+        { name:'Wedding',         current:0,     target:6000  },
+        { name:'New Car Down',    current:0,     target:10000 },
+        { name:'Childbirth',      current:0,     target:5000  },
+        { name:'Furniture',       current:0,     target:5000  },
+      ]);
+      window.DEBTS = load(K.DEBTS, [
+        { name:'Credit Card (Freedom)', balance:6493.26, min:130,    rate:19.99 },
+        { name:'Mohela',                balance:3590,    min:224.48, rate:5.5   },
+        { name:'Sallie Mae',            balance:8200,    min:154.45, rate:6.8   },
+        { name:'Nelnet',                balance:24000,   min:448.13, rate:6.54  },
+        { name:'Killian Hospital',      balance:0,       min:0,      rate:0     },
+        { name:'Meredith Hospital',     balance:0,       min:0,      rate:0     },
+      ]);
+      window.INVS  = load(K.INVS, [
+        { name:'Taxable Brokerage', balance:0, contrib:0, type:'Taxable Brokerage'    },
+        { name:'401k / Retirement', balance:0, contrib:0, type:'Retirement (401k/IRA)'},
+        { name:'Roth IRA',          balance:0, contrib:0, type:'Retirement (401k/IRA)'},
+        { name:'Cryptocurrency',    balance:0, contrib:0, type:'Cryptocurrency'        },
+      ]);
+      window.PROJS = load(K.PROJS, [
+        { name:'Shower Door',           vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Gutters',               vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Fence',                 vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Dining Furniture',      vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Barstools',             vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Living Room Furniture', vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+        { name:'Office Furniture',      vendor:'', quote:0, budgeted:0, saved:0, timeline:'' },
+      ]);
+
+      // Merge saved user rules on top of built-ins
+      const savedUserRules = load(K.RULES, []);
+      const builtIns = RULES.filter(r => r.src === 'built-in');
+      RULES.length = 0;
+      RULES.push(...savedUserRules, ...builtIns);
+    },
+
+    // ── Export: CSV of transactions ─────────────────────────────────────────────
+    exportTransactionsCSV(year) {
+      const rows = [['Year','Month','Date','Description','Category','Amount','Type']];
+      const yearData = window.TXNS[year] || {};
+      for (const month of MONTHS) {
+        for (const t of (yearData[month] || [])) {
+          rows.push([
+            year, month, t.date,
+            `"${(t.desc||'').replace(/"/g,'""')}"`,
+            `"${t.cat}"`,
+            t.type === 'expense' ? -t.amount : t.amount,
+            t.type
+          ]);
+        }
+      }
+      downloadCSV(rows, `budget-transactions-${year}.csv`);
+    },
+
+    // ── Export: CSV of monthly budget summary ───────────────────────────────────
+    exportBudgetCSV(year) {
+      const rows = [['Year','Month','Planned Income','Actual Income','Planned Expense','Actual Expense','Net','Savings Rate %']];
+      for (const m of MONTHS) {
+        const b   = (window.BUD[year] || {})[m] || {};
+        const exp = (b.sk||0)+(b.dtd||0)+(b.cal||0)+(b.nm||0);
+        const net = (b.income||0) - exp;
+        const sr  = b.income > 0 ? ((net/b.income)*100).toFixed(1) : 0;
+        rows.push([year, m, b.pI||0, b.income||0, b.pE||0, exp, net, sr]);
+      }
+      downloadCSV(rows, `budget-summary-${year}.csv`);
+    },
+
+    // ── Export: full year JSON snapshot ────────────────────────────────────────
+    exportJSON(year) {
+      const snapshot = {
+        exportedAt:   new Date().toISOString(),
+        year,
+        transactions: window.TXNS[year] || {},
+        budget:       (window.BUD[year]  || {}),
+        goals:        window.GOALS,
+        debts:        window.DEBTS,
+        investments:  window.INVS,
+        projects:     window.PROJS,
+        customRules:  RULES.filter(r => r.src !== 'built-in'),
+      };
+      const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type:'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = `budget-backup-${year}.json`; a.click();
+      URL.revokeObjectURL(url);
+      toast('JSON backup downloaded.', 'ok');
+    },
+
+    // ── Year-end purge (after confirming export) ────────────────────────────────
+    purgeYear(year) {
+      delete window.TXNS[year];
+      if (window.INCSRC[year]) { Object.values(window.INCSRC[year]).forEach(arr => arr.forEach(i => { i.a = 0; })); }
+      if (window.BUD[year])  { Object.values(window.BUD[year]).forEach(b  => { b.income=0; b.sk=0; b.dtd=0; b.cal=0; b.nm=0; }); }
+      if (window.SKI[year])  { Object.values(window.SKI[year]).forEach(arr => arr.forEach(i => i.a = 0)); }
+      if (window.DTDI[year]) { Object.values(window.DTDI[year]).forEach(arr => arr.forEach(i => i.a = 0)); }
+      this.saveTxns();
+      this.saveBudget();
+      toast(`${year} cleared. Ready for new year.`, 'ok');
+    },
+  };
+})();
+
+// ─── CSV download helper ───────────────────────────────────────────────────────
+function downloadCSV(rows, filename) {
+  const csv  = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  toast(`${filename} downloaded.`, 'ok');
+}
+// ─── Dashboard Tab ────────────────────────────────────────────────────────────
+const Dashboard = (() => {
+  const CH = {};
+  function kc(id) { if (CH[id]) { CH[id].destroy(); delete CH[id]; } }
+  function fc(r)  { return r > 1.1 ? 'fill-over' : r > 0.85 ? 'fill-warn' : 'fill-ok'; }
+
+  function rowHtml(it) {
+    const r = it.p > 0 ? it.a / it.p : 0;
+    return `<div class="row">
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between">
+          <span>${escHtml(it.n)}</span>
+          <span class="muted" style="font-size:11px">budget: ${fmt(it.p)}</span>
+        </div>
+        ${it.p > 0 ? `<div class="bar"><div class="fill ${fc(r)}" style="width:${Math.min(r*100,100).toFixed(0)}%"></div></div>` : ''}
+      </div>
+      <div style="text-align:right;margin-left:12px;font-weight:500">${fmt(it.a)}</div>
+    </div>`;
+  }
+
+  function render() {
+    const m    = document.getElementById('dash-month').value;
+    const year = parseInt(document.getElementById('dash-year').value);
+    const b    = ((window.BUD[year] || {})[m]) || {};
+    const exp  = (b.sk||0)+(b.dtd||0)+(b.cal||0)+(b.nm||0);
+    const net  = (b.income||0) - exp;
+    const sr   = b.income > 0 ? Math.round(net / b.income * 100) : 0;
+
+    document.getElementById('dash-net').innerHTML =
+      `<span class="${net >= 0 ? 'pos' : 'neg'}">${net >= 0 ? 'Surplus' : 'Deficit'}: ${fmt(net)}</span>`;
+
+    document.getElementById('dash-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Income</div><div class="val pos">${fmt(b.income||0)}</div></div>
+      <div class="metric"><div class="lbl">Expenses</div><div class="val neg">${fmt(exp)}</div></div>
+      <div class="metric"><div class="lbl">Net</div><div class="val ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>
+      <div class="metric"><div class="lbl">Savings Rate</div>
+        <div class="val ${sr>=15?'pos':sr>=5?'warn':'neg'}">${sr}%</div></div>
+    `;
+
+    // Bar chart — Jan–Jun of selected year
+    const mos  = MONTHS.slice(0, 6);
+    const bYear = window.BUD[year] || {};
+    const incD = mos.map(x => (bYear[x]||{}).income || 0);
+    const expD = mos.map(x => {
+      const bx = bYear[x] || {};
+      return (bx.sk||0)+(bx.dtd||0)+(bx.cal||0)+(bx.nm||0);
+    });
+    kc('c-bar');
+    CH['c-bar'] = new Chart(document.getElementById('c-bar'), {
+      type: 'bar',
+      data: { labels: mos, datasets: [
+        { label:'Income',   data:incD, backgroundColor:'rgba(52,201,138,0.8)', borderWidth:0, borderRadius:3 },
+        { label:'Expenses', data:expD, backgroundColor:'rgba(240,90,90,0.75)', borderWidth:0, borderRadius:3 },
+      ]},
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:false } },
+        scales:{
+          y:{ ticks:{callback:v=>'$'+Math.round(v/1000)+'k',font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'} },
+          x:{ ticks:{font:{size:11}}, grid:{display:false} }
+        }
+      }
+    });
+
+    // Donut
+    kc('c-pie');
+    CH['c-pie'] = new Chart(document.getElementById('c-pie'), {
+      type: 'doughnut',
+      data: { labels:['Skeleton','Day to Day','Other'],
+              datasets:[{ data:[b.sk||0, b.dtd||0, (b.cal||0)+(b.nm||0)],
+                          backgroundColor:['#4f8ef7','#34c98a','#f5a623'], borderWidth:0 }] },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'62%',
+        plugins:{ legend:{ position:'bottom',
+          labels:{ font:{size:10}, boxWidth:8, padding:6, color:'#7b82a0' } } } }
+    });
+
+    const sk  = ((window.SKI[year]  || {})[m]) || [];
+    const dtd = ((window.DTDI[year] || {})[m]) || [];
+    document.getElementById('dash-sk').innerHTML  = sk.slice(0,8).map(rowHtml).join('')
+      || '<p class="muted" style="font-size:12px;padding:6px 0">No data yet for this month.</p>';
+    document.getElementById('dash-dtd').innerHTML = dtd.slice(0,7).map(rowHtml).join('')
+      || '<p class="muted" style="font-size:12px;padding:6px 0">No data yet for this month.</p>';
+  }
+
+  function mount() {
+    const y = new Date().getFullYear();
+    const yearOpts = [y-1,y,y+1].map(yr =>
+      `<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`).join('');
+
+    const el = document.getElementById('tab-dashboard');
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;
+                  margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;gap:8px">
+          <select id="dash-month">
+            ${MONTHS.map(m=>`<option>${m}</option>`).join('')}
+          </select>
+          <select id="dash-year">${yearOpts}</select>
+        </div>
+        <span id="dash-net" style="font-size:14px;font-weight:500"></span>
+      </div>
+      <div class="metrics" id="dash-metrics"></div>
+      <div class="grid2">
+        <div>
+          <div class="card">
+            <h3>Income vs Expenses</h3>
+            <div class="chart-wrap" style="height:155px"><canvas id="c-bar"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Spending Mix</h3>
+            <div class="chart-wrap" style="height:155px"><canvas id="c-pie"></canvas></div>
+          </div>
+        </div>
+        <div>
+          <div class="card"><h3>Skeleton Bills</h3><div id="dash-sk"></div></div>
+          <div class="card"><h3>Day to Day</h3><div id="dash-dtd"></div></div>
+        </div>
+      </div>
+    `;
+    // Default to current month
+    const curMonth = MONTHS[new Date().getMonth()];
+    document.getElementById('dash-month').value = curMonth;
+    document.getElementById('dash-month').addEventListener('change', render);
+    document.getElementById('dash-year').addEventListener('change', render);
+    render();
+  }
+
+  return { mount, render };
+})();
+// ─── Import Tab ───────────────────────────────────────────────────────────────
+const Import = (() => {
+  let _parsed = [];
+
+  function catOptions(selected) {
+    return CATS.map(c =>
+      `<option value="${c}"${c === selected ? ' selected' : ''}>${c}</option>`
+    ).join('');
+  }
+
+  function curMonth() { return MONTHS[new Date().getMonth()]; }
+  function curYear()  { return new Date().getFullYear(); }
+
+  // ── Parse raw text (paste or CSV lines) ──────────────────────────────────────
+  // Supports your bank export: Date, Description, Original Description, Category, Amount
+  // Amount: negative = expense, positive = income
+  function parseLines(raw, hasHeader) {
+    const lines = raw.split('\n').filter(l => l.trim());
+    const start = hasHeader ? 1 : 0;
+    const results = [];
+
+    // Detect column layout from header if present
+    let dateCol=0, descCol=1, amtCol=4;  // default: bank export layout
+    if (hasHeader && lines[0]) {
+      const h = lines[0].toLowerCase().split(/\t|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(p=>p.trim().replace(/^"|"$/g,''));
+      const di = h.findIndex(x => x.includes('date'));
+      const dsi= h.findIndex(x => x === 'description');
+      const ai = h.findIndex(x => x.includes('amount'));
+      if (di >= 0) dateCol = di;
+      if (dsi >= 0) descCol = dsi;
+      if (ai >= 0) amtCol  = ai;
+    }
+
+    for (let li = start; li < lines.length; li++) {
+      const parts = lines[li].split(/\t|,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
+                              .map(p => p.trim().replace(/^"|"$/g, ''));
+      if (parts.length < 2) continue;
+
+      const dateRaw = (parts[dateCol] || '').trim();
+      const desc    = (parts[descCol] || '').trim();
+      const amtRaw  = (parts[amtCol]  || parts[1] || '').replace(/[$,\s]/g, '');
+      const amt     = parseFloat(amtRaw);
+      if (!dateRaw || isNaN(amt)) continue;
+
+      // Bank export: negative = expense, positive = income (matches your format)
+      const res = categorize(desc);
+      results.push({
+        date:     dateRaw,
+        amount:   Math.abs(amt),
+        desc,
+        cat:      res.cat,
+        conf:     res.conf,
+        autoSrc:  res.src,
+        type:     amt < 0 ? 'expense' : 'income',
+      });
+    }
+    return results;
+  }
+
+  // ── Handle CSV file upload ────────────────────────────────────────────────────
+  function handleCSV(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const text = e.target.result.replace(/^\uFEFF/, ''); // strip BOM
+      const lines = text.split('\n').filter(l => l.trim());
+      const firstLower = (lines[0] || '').toLowerCase();
+      const hasHeader = firstLower.includes('date') || firstLower.includes('amount') || firstLower.includes('description');
+      _parsed = parseLines(text, hasHeader);
+      // Auto-set month/year from first transaction date if parseable
+      if (_parsed.length) {
+        const d = new Date(_parsed[0].date);
+        if (!isNaN(d)) {
+          const mo = MONTHS[d.getMonth()];
+          const yr = d.getFullYear();
+          document.getElementById('imp-month').value = mo;
+          document.getElementById('imp-year').value  = yr;
+        }
+      }
+      renderPreview();
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Paste parse ───────────────────────────────────────────────────────────────
+  function doParse() {
+    const raw = document.getElementById('imp-paste').value.trim();
+    if (!raw) { showMsg('imp-msg', 'Nothing to parse — paste rows or upload a CSV.', 'err'); return; }
+    const lines = raw.split('\n').filter(l => l.trim());
+    const firstLower = (lines[0] || '').toLowerCase();
+    const hasHeader = firstLower.includes('date') || firstLower.includes('amount') || firstLower.includes('description');
+    _parsed = parseLines(raw, hasHeader);
+    if (_parsed.length) {
+      const d = new Date(_parsed[0].date);
+      if (!isNaN(d)) {
+        document.getElementById('imp-month').value = MONTHS[d.getMonth()];
+        document.getElementById('imp-year').value  = d.getFullYear();
+      }
+    }
+    renderPreview();
+  }
+
+  // ── Duplicate detection ──────────────────────────────────────────────────────
+  // A duplicate is an existing transaction with same date + amount + first 12 chars of desc.
+  // Returns 'exact' | 'likely' | null
+  function _dupStatus(t, month, year) {
+    const existing = (window.TXNS[year]?.[month]) || [];
+    const descKey  = t.desc.toLowerCase().slice(0, 12);
+    for (const e of existing) {
+      const sameAmt  = Math.abs(e.amount - t.amount) < 0.01;
+      const sameDesc = e.desc.toLowerCase().slice(0, 12) === descKey;
+      const sameDate = e.date === t.date;
+      if (sameAmt && sameDesc && sameDate)  return 'exact';
+      if (sameAmt && sameDesc)              return 'likely';  // same amount+merchant, diff date
+    }
+    return null;
+  }
+
+  function renderPreview() {
+    const month = document.getElementById('imp-month').value;
+    const year  = parseInt(document.getElementById('imp-year').value);
+    if (!_parsed.length) {
+      showMsg('imp-msg', 'Could not parse any rows. Expected columns: Date, Description, Original Description, Category, Amount.', 'err');
+      return;
+    }
+
+    // Tag each row with duplicate status
+    _parsed.forEach(t => { t._dup = _dupStatus(t, month, year); });
+
+    const exactDups  = _parsed.filter(t => t._dup === 'exact').length;
+    const likelyDups = _parsed.filter(t => t._dup === 'likely').length;
+    const clean      = _parsed.filter(t => !t._dup).length;
+    const hiCount    = _parsed.filter(t => t.conf >= 60 && !t._dup).length;
+
+    // Build duplicate summary banner
+    let dupBanner = '';
+    if (exactDups || likelyDups) {
+      dupBanner = `<div class="alert alert-warn" style="margin-bottom:10px">
+        <strong>Duplicate check:</strong>
+        ${exactDups ? `<strong>${exactDups} exact duplicate${exactDups>1?'s':''}</strong> (same date, amount &amp; merchant) — marked in red, excluded by default.` : ''}
+        ${exactDups && likelyDups ? ' &nbsp;·&nbsp; ' : ''}
+        ${likelyDups ? `<strong>${likelyDups} possible duplicate${likelyDups>1?'s':''}</strong> (same amount &amp; merchant, different date) — marked in amber, review before importing.` : ''}
+        &nbsp; Review below and remove any you don't want.
+      </div>`;
+    }
+
+    const rows = _parsed.map((t, i) => {
+      const isExact  = t._dup === 'exact';
+      const isLikely = t._dup === 'likely';
+      const rowStyle = isExact  ? 'background:rgba(240,90,90,0.08);'
+                     : isLikely ? 'background:rgba(245,166,35,0.08);' : '';
+      const dupBadge = isExact  ? `<span style="font-size:10px;color:var(--red);font-weight:500;margin-left:4px"
+                                          title="Already in ${month} ${year}">⚠ exact dup</span>`
+                     : isLikely ? `<span style="font-size:10px;color:var(--amber);font-weight:500;margin-left:4px"
+                                          title="Same merchant &amp; amount exists">⚠ possible dup</span>`
+                     : '';
+      return `<tr style="${rowStyle}">
+        <td>${escHtml(t.date)}</td>
+        <td title="${escHtml(t.desc)}">${escHtml(t.desc.slice(0,24))}${dupBadge}</td>
+        <td>
+          <select style="width:100%;font-size:11px;padding:2px 4px"
+                  onchange="Import._correct(${i},this.value)">
+            ${catOptions(t.cat)}
+          </select>
+        </td>
+        <td style="color:${t.type==='income'?'var(--green)':'var(--red)'};text-align:right">
+          ${t.type==='income'?'+':'-'}${fmt(t.amount)}
+        </td>
+        <td>
+          <span style="font-size:10px;font-weight:500;color:${t.conf>=70?'var(--green)':t.conf>=40?'var(--amber)':'var(--red)'}">
+            ${t.conf}%
+          </span>
+          <div class="bar" style="margin-top:1px">
+            <div class="fill ${t.conf>=70?'fill-ok':t.conf>=40?'fill-warn':'fill-over'}" style="width:${t.conf}%"></div>
+          </div>
+        </td>
+        <td><button class="btn btn-sm btn-danger" onclick="Import._remove(${i})">✕</button></td>
+      </tr>`;
+    }).join('');
+
+    // Import buttons — skip exact dups by default, warn on likely
+    const importClean  = _parsed.filter(t => !t._dup).length;
+    const importAll    = _parsed.length;
+
+    document.getElementById('imp-preview').innerHTML = `
+      <div class="card">
+        <h3>${importAll} rows parsed &nbsp;·&nbsp; ${clean} new &nbsp;·&nbsp;
+            ${exactDups} exact dups &nbsp;·&nbsp; ${likelyDups} possible dups &nbsp;·&nbsp;
+            importing into <strong>${month} ${year}</strong></h3>
+        ${dupBanner}
+        <div class="alert alert-info" style="margin-bottom:10px">
+          Correcting a category teaches the auto-categorizer for next time.
+          Remove any rows you don't want before importing.
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl" style="table-layout:fixed">
+            <colgroup>
+              <col style="width:10%"><col style="width:26%"><col style="width:31%">
+              <col style="width:13%"><col style="width:10%"><col style="width:10%">
+            </colgroup>
+            <thead>
+              <tr><th>Date</th><th>Description</th><th>Category</th>
+                  <th>Amount</th><th>Conf.</th><th></th></tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div class="btn-group" style="margin-top:12px;flex-wrap:wrap">
+          ${importClean > 0 ? `<button class="btn btn-primary" onclick="Import._importNew()">
+            Import ${importClean} new (skip dups)
+          </button>` : ''}
+          <button class="btn ${importClean===0?'btn-primary':''}" onclick="Import._importAll()">
+            Import all ${importAll} (include flagged)
+          </button>
+          <button class="btn" onclick="Import._removeAllDups()">Remove all flagged</button>
+          <button class="btn" onclick="document.getElementById('imp-preview').innerHTML=''">Cancel</button>
+        </div>
+      </div>`;
+  }
+
+  function _correct(i, cat) {
+    learnFromCorrection(_parsed[i].desc, cat);
+    _parsed[i].cat = cat;
+  }
+
+  function _remove(i) {
+    _parsed.splice(i, 1);
+    if (_parsed.length) renderPreview();
+    else document.getElementById('imp-preview').innerHTML = '';
+  }
+
+  function _removeAllDups() {
+    _parsed = _parsed.filter(t => !t._dup);
+    if (_parsed.length) renderPreview();
+    else document.getElementById('imp-preview').innerHTML =
+      '<div class="alert alert-ok">All flagged rows removed. Nothing left to import.</div>';
+  }
+
+  function _doImport(rows) {
+    if (!rows.length) return;
+    const month = document.getElementById('imp-month').value;
+    const year  = parseInt(document.getElementById('imp-year').value);
+    Storage.ensureMonth(year, month);
+    for (const t of rows) {
+      window.TXNS[year][month].push({ ...t, month, year });
+    }
+    _refreshBudgetActuals(year, month);
+    Storage.saveTxns();
+    Storage.saveBudget();
+    Storage.saveRules();
+    const n = rows.length;
+    _parsed = [];
+    document.getElementById('imp-preview').innerHTML =
+      `<div class="alert alert-ok">✓ Imported ${n} transactions into ${month} ${year}. Budget actuals updated.</div>`;
+    document.getElementById('imp-paste').value = '';
+    toast(`${n} transactions imported.`, 'ok');
+  }
+
+  function _importNew()  { _doImport(_parsed.filter(t => !t._dup)); }
+  function _importAll()  { _doImport([..._parsed]); }
+
+  // ── Recompute budget actuals from transactions immediately on import ──────────
+  function _refreshBudgetActuals(year, month) {
+    Storage.ensureMonth(year, month);
+    const txns = (window.TXNS[year] || {})[month] || [];
+    const b = window.BUD[year][month];
+    const sk  = window.SKI[year][month]  || [];
+    const dtd = window.DTDI[year][month] || [];
+
+    // Reset actuals
+    sk.forEach(i => i.a = 0);
+    dtd.forEach(i => i.a = 0);
+    b.income = 0; b.sk = 0; b.dtd = 0;
+
+    for (const t of txns) {
+      if (t.type === 'income') { b.income += t.amount; continue; }
+      // Try to match to a skeleton line item by name similarity
+      const matched = [...sk, ...dtd].find(li =>
+        t.cat && li.n.toLowerCase().includes(t.cat.toLowerCase().slice(0,8))
+      );
+      if (matched) { matched.a += t.amount; }
+      // Roll up to section totals by category
+      const skCats = ['Mortgage','Electric','Water','Mowing','Lawn Treatment','ADT Security',
+        'Cell Phones','Grace Coaching','Mohela','Sallie Mae','Nelnet','Life Insurance Plans',
+        'Killian Life Insurance','FL Prepaid','Killian FL Prepaid','Discovery Point & Soccer',
+        'Freedom CC - MRN','Freedom CC - PMK','USAA Insurance','Storage','Spotify',
+        'Madeline Moves','Gym Memberships','Peloton','USF Athletics','TV Subscriptions',
+        'Internet','Oura','Taxes','Collections'];
+      if (skCats.includes(t.cat)) b.sk += t.amount;
+      else b.dtd += t.amount;
+    }
+  }
+
+  function addSingle() {
+    const date  = document.getElementById('s-date').value;
+    const amt   = parseFloat(document.getElementById('s-amt').value);
+    const desc  = document.getElementById('s-desc').value.trim();
+    const cat   = document.getElementById('s-cat').value;
+    const month = document.getElementById('s-month').value;
+    const year  = parseInt(document.getElementById('s-year').value);
+    if (!date || isNaN(amt) || !desc) { showMsg('s-msg', 'Fill in all fields.', 'err'); return; }
+    Storage.ensureMonth(year, month);
+    window.TXNS[year][month].push({
+      date, amount:Math.abs(amt), desc, cat,
+      type: amt < 0 ? 'expense' : 'income',
+      month, year, conf:100, autoSrc:'manual'
+    });
+    _refreshBudgetActuals(year, month);
+    Storage.saveTxns();
+    Storage.saveBudget();
+    showMsg('s-msg', `Added to ${month} ${year}.`, 'ok');
+    document.getElementById('s-date').value  = '';
+    document.getElementById('s-amt').value   = '';
+    document.getElementById('s-desc').value  = '';
+  }
+
+  function monthOpts() {
+    const cur = curMonth();
+    return MONTHS.map(m => `<option${m===cur?' selected':''}>${m}</option>`).join('');
+  }
+  function yearOpts() {
+    const y = curYear();
+    return [y-1,y,y+1].map(yr => `<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`).join('');
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-import');
+    el.innerHTML = `
+      <div class="card">
+        <h3>Import Transactions</h3>
+        <p class="sheets-info" style="margin-bottom:12px;line-height:1.7">
+          <strong>Option A — Upload CSV:</strong> Download from your bank and upload directly.
+          Supports your bank's export format: <code>Date, Description, Original Description, Category, Amount</code><br>
+          Negative amounts = expenses, positive = income — matches your bank export exactly.<br>
+          <strong>Option B — Paste:</strong> Copy rows from your bank's transaction table and paste below.<br>
+          Month/year auto-detects from transaction dates.
+        </p>
+        <div class="fr fr2" style="margin-bottom:10px">
+          <div><label>Month (auto-set from CSV)</label>
+            <select id="imp-month">${monthOpts()}</select></div>
+          <div><label>Year (auto-set from CSV)</label>
+            <select id="imp-year">${yearOpts()}</select></div>
+        </div>
+        <div class="btn-group" style="margin-bottom:10px">
+          <label class="btn btn-primary" style="cursor:pointer">
+            Upload Bank CSV
+            <input type="file" accept=".csv,.txt" style="display:none"
+                   onchange="Import._handleCSV(this.files[0])">
+          </label>
+          <span style="color:var(--muted);font-size:12px;align-self:center">— or paste below —</span>
+        </div>
+        <label>Paste rows here</label>
+        <textarea id="imp-paste"
+          placeholder="Date,Description,Original Description,Category,Amount&#10;01/15/2026,PUBLIX #1234,PUBLIX,Groceries,-45.99&#10;01/16/2026,DIRECT DEP MRN,,Income,3094.70">
+        </textarea>
+        <div class="btn-group" style="margin-top:10px">
+          <button class="btn btn-primary" onclick="Import._doParse()">Parse &amp; Auto-Categorize</button>
+        </div>
+        <div id="imp-msg"></div>
+      </div>
+
+      <div id="imp-preview"></div>
+
+      <div class="card">
+        <h3>Add Single Transaction</h3>
+        <div class="fr fr3">
+          <div><label>Date</label><input type="date" id="s-date"></div>
+          <div><label>Amount (negative = expense)</label><input type="number" id="s-amt" placeholder="-45.00"></div>
+          <div><label>Description</label><input type="text" id="s-desc" placeholder="Publix"></div>
+        </div>
+        <div class="fr fr3" style="margin-bottom:10px">
+          <div><label>Category</label><select id="s-cat">${catOptions(CATS[0])}</select></div>
+          <div><label>Month</label><select id="s-month">${monthOpts()}</select></div>
+          <div><label>Year</label><select id="s-year">${yearOpts()}</select></div>
+        </div>
+        <button class="btn btn-primary" onclick="Import._addSingle()">Add Transaction</button>
+        <div id="s-msg"></div>
+      </div>
+    `;
+  }
+
+  return { mount, _doParse:doParse, _handleCSV:handleCSV, _correct, _remove, _importAll, _importNew, _removeAllDups, _addSingle:addSingle };
+})();
+// ─── Budget Tab ───────────────────────────────────────────────────────────────
+const Budget = (() => {
+  function fc(r) { return r > 1.1 ? 'fill-over' : r > 0.85 ? 'fill-warn' : 'fill-ok'; }
+
+  function getYM() {
+    return {
+      m:    document.getElementById('bud-month')?.value || MONTHS[new Date().getMonth()],
+      year: parseInt(document.getElementById('bud-year')?.value) || new Date().getFullYear()
+    };
+  }
+
+  function lineItemHtml(it, sectionKey, idx) {
+    const r    = it.p > 0 ? it.a / it.p : 0;
+    const diff = it.p - it.a;
+    return `<div class="row" style="align-items:flex-start;padding:8px 0">
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:500;font-size:13px">${escHtml(it.n)}</span>
+          <div style="display:flex;gap:4px;align-items:center">
+            <span style="font-size:13px;font-weight:500;margin-right:6px">${fmt(it.a)}</span>
+            <span style="font-size:11px;color:var(--muted)">/ ${fmt(it.p)}</span>
+            ${it.p > 0 ? `<span style="font-size:11px;color:${diff>=0?'var(--green)':'var(--red)'}">
+              &nbsp;${diff>=0?'+':''}${fmt(diff)}</span>` : ''}
+            <button class="btn btn-sm" onclick="Budget._editLine('${sectionKey}',${idx})"
+                    style="font-size:10px;padding:2px 7px;margin-left:6px">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="Budget._deleteLine('${sectionKey}',${idx})"
+                    style="font-size:10px;padding:2px 6px">✕</button>
+          </div>
+        </div>
+        ${it.p > 0 ? `<div class="bar" style="margin-top:4px">
+          <div class="fill ${fc(r)}" style="width:${Math.min(r*100,100).toFixed(0)}%"></div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function incomeLine(it, idx) {
+    const diff = it.p - it.a;
+    return `<div class="row" style="align-items:flex-start;padding:8px 0">
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:500;font-size:13px">${escHtml(it.n)}</span>
+          <div style="display:flex;gap:4px;align-items:center">
+            <span class="pos" style="font-size:13px;font-weight:500;margin-right:6px">${fmt(it.a)}</span>
+            <span style="font-size:11px;color:var(--muted)">expected: ${fmt(it.p)}</span>
+            ${it.p > 0 ? `<span style="font-size:11px;color:${it.a>=it.p?'var(--green)':'var(--red)'}">
+              &nbsp;${it.a>=it.p?'+':''}${fmt(it.a-it.p)}</span>` : ''}
+            <button class="btn btn-sm" onclick="Budget._editIncome(${idx})"
+                    style="font-size:10px;padding:2px 7px;margin-left:6px">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="Budget._deleteIncome(${idx})"
+                    style="font-size:10px;padding:2px 6px">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function render() {
+    const { m, year } = getYM();
+    Storage.ensureMonth(year, m);
+    const b   = window.BUD[year][m];
+    const sk  = window.SKI[year][m]   || [];
+    const dtd = window.DTDI[year][m]  || [];
+    const inc = window.INCSRC[year]?.[m] || [];
+
+    const totalInc  = inc.reduce((s,i) => s + (i.a||0), 0);
+    const planInc   = inc.reduce((s,i) => s + (i.p||0), 0);
+    const totalSk   = sk.reduce((s,i) => s + (i.a||0), 0);
+    const totalDtd  = dtd.reduce((s,i) => s + (i.a||0), 0);
+    const totalExp  = totalSk + totalDtd;
+    const net       = totalInc - totalExp;
+
+    // Keep BUD summary in sync
+    b.income = totalInc; b.sk = totalSk; b.dtd = totalDtd;
+    b.pI = planInc;
+
+    document.getElementById('bud-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Planned Income</div><div class="val">${fmt(planInc)}</div></div>
+      <div class="metric"><div class="lbl">Actual Income</div><div class="val pos">${fmt(totalInc)}</div></div>
+      <div class="metric"><div class="lbl">Total Expenses</div><div class="val neg">${fmt(totalExp)}</div></div>
+      <div class="metric"><div class="lbl">Net</div><div class="val ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>
+    `;
+
+    const addBtn = key => `<button class="btn btn-sm"
+        style="float:right;margin-top:-2px" onclick="Budget._addLine('${key}')">+ Add</button>`;
+
+    document.getElementById('bud-lines').innerHTML = `
+      <div class="slbl">Skeleton — Fixed Bills ${addBtn('sk')}</div>
+      ${sk.map((it,i) => lineItemHtml(it,'sk',i)).join('') || '<p class="muted" style="font-size:12px;padding:4px 0">No items.</p>'}
+
+      <div class="slbl" style="margin-top:12px">Day to Day ${addBtn('dtd')}</div>
+      ${dtd.map((it,i) => lineItemHtml(it,'dtd',i)).join('') || '<p class="muted" style="font-size:12px;padding:4px 0">No items.</p>'}
+
+      <div class="slbl" style="margin-top:16px;border-top:1px solid var(--border);padding-top:10px">
+        Income Sources
+        <button class="btn btn-sm" style="float:right;margin-top:-2px" onclick="Budget._addIncome()">+ Add</button>
+      </div>
+      ${inc.map((it,i) => incomeLine(it,i)).join('') || '<p class="muted" style="font-size:12px;padding:4px 0">No income sources added yet.</p>'}
+    `;
+  }
+
+  function _getArr(sectionKey) {
+    const { m, year } = getYM();
+    Storage.ensureMonth(year, m);
+    return sectionKey === 'sk' ? window.SKI[year][m] : window.DTDI[year][m];
+  }
+  function _getInc() {
+    const { m, year } = getYM();
+    if (!window.INCSRC[year]) window.INCSRC[year] = {};
+    if (!window.INCSRC[year][m]) window.INCSRC[year][m] = [];
+    return window.INCSRC[year][m];
+  }
+
+  function _addLine(sectionKey) {
+    const name    = prompt('Item name (e.g. Electric, Groceries):');
+    if (!name) return;
+    const planned = parseFloat(prompt('Planned / budgeted amount ($):', '0')) || 0;
+    const actual  = parseFloat(prompt('Actual spent so far ($):', '0'))       || 0;
+    _getArr(sectionKey).push({ n: name.trim(), p: planned, a: actual });
+    Storage.saveBudget(); render();
+  }
+  function _editLine(sectionKey, idx) {
+    const arr  = _getArr(sectionKey);
+    const item = arr[idx];
+    const name    = prompt('Item name:', item.n);
+    if (name === null) return;
+    const planned = parseFloat(prompt('Planned amount ($):', item.p)) || 0;
+    const actual  = parseFloat(prompt('Actual amount ($):', item.a))  || 0;
+    arr[idx] = { n: name.trim(), p: planned, a: actual };
+    Storage.saveBudget(); render();
+  }
+  function _deleteLine(sectionKey, idx) {
+    const arr = _getArr(sectionKey);
+    if (!confirm(`Delete "${arr[idx].n}"?`)) return;
+    arr.splice(idx, 1);
+    Storage.saveBudget(); render();
+  }
+  function _addIncome() {
+    const name    = prompt('Income source (e.g. MRN Paycheck, PMK Paycheck, Bonus):');
+    if (!name) return;
+    const planned = parseFloat(prompt('Expected amount ($):', '0'))   || 0;
+    const actual  = parseFloat(prompt('Actual received ($):', '0'))   || 0;
+    _getInc().push({ n: name.trim(), p: planned, a: actual });
+    Storage.saveBudget(); render();
+  }
+  function _editIncome(idx) {
+    const arr  = _getInc();
+    const item = arr[idx];
+    const name    = prompt('Income source:', item.n);
+    if (name === null) return;
+    const planned = parseFloat(prompt('Expected ($):', item.p)) || 0;
+    const actual  = parseFloat(prompt('Actual ($):', item.a))   || 0;
+    arr[idx] = { n: name.trim(), p: planned, a: actual };
+    Storage.saveBudget(); render();
+  }
+  function _deleteIncome(idx) {
+    const arr = _getInc();
+    if (!confirm(`Delete "${arr[idx].n}"?`)) return;
+    arr.splice(idx, 1);
+    Storage.saveBudget(); render();
+  }
+
+  function mount() {
+    const y = new Date().getFullYear();
+    const curM = MONTHS[new Date().getMonth()];
+    const yearOpts = [y-1,y,y+1].map(yr =>
+      `<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`).join('');
+    const el = document.getElementById('tab-budget');
+    el.innerHTML = `
+      <div style="display:flex;gap:8px;margin-bottom:14px;align-items:flex-end;flex-wrap:wrap">
+        <div>
+          <label>Month</label>
+          <select id="bud-month">${MONTHS.map(m=>`<option${m===curM?' selected':''}>${m}</option>`).join('')}</select>
+        </div>
+        <div>
+          <label>Year</label>
+          <select id="bud-year">${yearOpts}</select>
+        </div>
+      </div>
+      <div class="metrics" id="bud-metrics"></div>
+      <div class="card" id="bud-lines"></div>
+    `;
+    document.getElementById('bud-month').addEventListener('change', render);
+    document.getElementById('bud-year').addEventListener('change', render);
+    render();
+  }
+
+  return { mount, render, _addLine, _editLine, _deleteLine, _addIncome, _editIncome, _deleteIncome };
+})();
+// ─── Goals Tab ────────────────────────────────────────────────────────────────
+const Goals = (() => {
+  let CH = {};
+  function kc(id) { if (CH[id]) { CH[id].destroy(); delete CH[id]; } }
+
+  function render() {
+    const goals = window.GOALS || [];
+    const total = goals.reduce((s, g) => s + g.target,  0);
+    const saved = goals.reduce((s, g) => s + g.current, 0);
+    const pct   = total > 0 ? Math.round(saved / total * 100) : 0;
+
+    document.getElementById('goals-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Total Target</div><div class="val">${fmt(total)}</div></div>
+      <div class="metric"><div class="lbl">Total Saved</div><div class="val pos">${fmt(saved)}</div></div>
+      <div class="metric"><div class="lbl">Still Needed</div><div class="val warn">${fmt(Math.max(0,total-saved))}</div></div>
+      <div class="metric"><div class="lbl">Overall Progress</div><div class="val ${pct>=50?'pos':'warn'}">${pct}%</div></div>
+    `;
+
+    document.getElementById('goals-list').innerHTML = goals.map((g, i) => {
+      const r   = g.target > 0 ? Math.min(g.current / g.target, 1) : 0;
+      const cls = r >= 1 ? 'fill-ok' : r > 0.5 ? 'fill-warn' : 'fill-blue';
+      const p   = g.target > 0 ? Math.round(r * 100) : 0;
+      return `<div class="row" style="align-items:flex-start;padding:9px 0">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:500">${escHtml(g.name)}</span>
+            <span class="muted" style="font-size:11px">${p}%</span>
+          </div>
+          <div class="bar" style="height:5px;margin-top:5px">
+            <div class="fill ${cls}" style="width:${p}%"></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${fmt(g.current)} of ${fmt(g.target)}</div>
+        </div>
+        <button class="btn btn-sm btn-danger" style="margin-left:12px;margin-top:2px"
+                onclick="Goals._delete(${i})">✕</button>
+      </div>`;
+    }).join('') || '<p class="muted" style="font-size:12px;padding:8px 0">No goals yet.</p>';
+
+    // Horizontal bar chart
+    kc('c-goals');
+    CH['c-goals'] = new Chart(document.getElementById('c-goals'), {
+      type: 'bar',
+      data: {
+        labels: goals.map(g => g.name.length > 14 ? g.name.slice(0, 14) + '…' : g.name),
+        datasets: [
+          { label:'Saved',     data: goals.map(g => g.current), backgroundColor:'#34c98a', borderWidth:0, borderRadius:3 },
+          { label:'Remaining', data: goals.map(g => Math.max(g.target - g.current, 0)),
+            backgroundColor:'rgba(52,201,138,0.12)', borderWidth:0, borderRadius:3 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { stacked: false, ticks: { callback: v => '$'+Math.round(v/1000)+'k', font:{size:10} },
+               grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { font:{size:10}, color:'#7b82a0' }, grid: { display:false } }
+        }
+      }
+    });
+  }
+
+  function _delete(i) {
+    if (!confirm(`Delete goal "${window.GOALS[i].name}"?`)) return;
+    window.GOALS.splice(i, 1);
+    Storage.saveGoals();
+    render();
+  }
+
+  function _add() {
+    const name    = document.getElementById('gn').value.trim();
+    const current = parseFloat(document.getElementById('gc').value) || 0;
+    const target  = parseFloat(document.getElementById('gt').value) || 0;
+    if (!name) { showMsg('g-msg', 'Enter a goal name.', 'err'); return; }
+
+    const ex = window.GOALS.find(g => g.name.toLowerCase() === name.toLowerCase());
+    if (ex) { ex.current = current; ex.target = target; }
+    else    { window.GOALS.push({ name, current, target }); }
+
+    Storage.saveGoals();
+    render();
+    showMsg('g-msg', 'Goal saved.', 'ok');
+    document.getElementById('gn').value = '';
+    document.getElementById('gc').value = '';
+    document.getElementById('gt').value = '';
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-goals');
+    el.innerHTML = `
+      <div class="metrics" id="goals-metrics"></div>
+      <div class="grid2">
+        <div><div class="card"><h3>Savings Goals</h3><div id="goals-list"></div></div></div>
+        <div><div class="card"><h3>Progress Overview</h3>
+          <div class="chart-wrap" style="height:220px"><canvas id="c-goals"></canvas></div>
+        </div></div>
+      </div>
+      <div class="card">
+        <h3>Add / Update Goal</h3>
+        <div class="fr fr3" style="margin-bottom:10px">
+          <div><label>Name</label><input type="text" id="gn" placeholder="Emergency Fund"></div>
+          <div><label>Currently Saved ($)</label><input type="number" id="gc" placeholder="0"></div>
+          <div><label>Target ($)</label><input type="number" id="gt" placeholder="0"></div>
+        </div>
+        <button class="btn btn-primary" onclick="Goals._add()">Save Goal</button>
+        <div id="g-msg"></div>
+      </div>
+    `;
+    render();
+  }
+
+  return { mount, render, _delete, _add };
+})();
+// ─── Debt Tab ─────────────────────────────────────────────────────────────────
+const Debt = (() => {
+  let CH = {};
+  function kc(id) { if (CH[id]) { CH[id].destroy(); delete CH[id]; } }
+
+  function render() {
+    const extra  = parseFloat(document.getElementById('debt-extra')?.value) || 0;
+    const strat  = document.getElementById('debt-strat')?.value || 'avalanche';
+    const active = (window.DEBTS || []).filter(d => d.balance > 0);
+    const totBal = active.reduce((s, d) => s + d.balance, 0);
+    const totMin = active.reduce((s, d) => s + d.min,     0);
+    const avgAPR = active.length ? active.reduce((s, d) => s + d.rate, 0) / active.length : 0;
+
+    document.getElementById('debt-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Total Debt</div><div class="val neg">${fmt(totBal)}</div></div>
+      <div class="metric"><div class="lbl">Min Payments / Mo</div><div class="val warn">${fmt(totMin)}</div></div>
+      <div class="metric"><div class="lbl">Avg APR</div><div class="val warn">${avgAPR.toFixed(1)}%</div></div>
+      <div class="metric"><div class="lbl">Active Accounts</div><div class="val">${active.length}</div></div>
+    `;
+
+    document.getElementById('debt-list').innerHTML = (window.DEBTS || []).map((d, i) => `
+      <div class="row">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between">
+            <span style="font-weight:500">${escHtml(d.name)}</span>
+            <span class="${d.balance>0?'neg':'pos'}">${fmt(d.balance)}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted)">
+            Min: ${fmt(d.min)}/mo &nbsp;·&nbsp; APR: ${d.rate}%
+            ${d.balance===0 ? ' &nbsp;·&nbsp; <span style="color:var(--green)">✓ Paid off</span>' : ''}
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" style="margin-left:10px"
+                onclick="Debt._delete(${i})">✕</button>
+      </div>`).join('') || '<p class="muted" style="font-size:12px;padding:6px 0">No debts added yet.</p>';
+
+    // Payoff simulation
+    const sorted = [...active].sort((a, b) =>
+      strat === 'avalanche' ? b.rate - a.rate : a.balance - b.balance
+    );
+    const snap = sorted.map(d => ({ ...d }));
+    const cL = [], cD = [];
+    let months = 0, bal = totBal;
+    while (bal > 0 && months < 360) {
+      for (const d of snap) {
+        if (d.balance <= 0) continue;
+        d.balance = Math.max(0, d.balance * (1 + d.rate / 1200) - d.min);
+      }
+      const focus = snap.find(d => d.balance > 0);
+      if (focus && extra > 0) focus.balance = Math.max(0, focus.balance - extra);
+      bal = snap.reduce((s, d) => s + Math.max(0, d.balance), 0);
+      months++;
+      if (months % 3 === 0 || bal <= 0) { cL.push('Mo ' + months); cD.push(Math.round(bal)); }
+    }
+    const y = Math.floor(months / 12), mo = months % 12;
+    document.getElementById('debt-calc-out').innerHTML =
+      `<div class="alert alert-info" style="margin-top:8px">
+        Using <strong>${strat}</strong>${extra > 0 ? ` + <strong>${fmt(extra)}/mo extra</strong>` : ''},
+        you'll be debt-free in
+        <strong>${y > 0 ? y + 'y ' : ''}${mo > 0 ? mo + 'mo' : ''}</strong>
+        ${months >= 360 ? '— consider increasing payments.' : ''}
+      </div>`;
+
+    kc('c-debt');
+    CH['c-debt'] = new Chart(document.getElementById('c-debt'), {
+      type: 'line',
+      data: { labels: cL, datasets: [{
+        label:'Balance', data: cD,
+        borderColor:'#f05a5a', backgroundColor:'rgba(240,90,90,0.07)',
+        tension:0.35, borderWidth:1.5, pointRadius:0, fill:true
+      }]},
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins: { legend: { display:false } },
+        scales: {
+          y: { ticks:{ callback: v=>'$'+Math.round(v/1000)+'k', font:{size:10} }, grid:{color:'rgba(255,255,255,0.05)'} },
+          x: { ticks:{ font:{size:10}, maxTicksLimit:8 }, grid:{display:false} }
+        }
+      }
+    });
+  }
+
+  function _delete(i) {
+    if (!confirm(`Remove "${window.DEBTS[i].name}"?`)) return;
+    window.DEBTS.splice(i, 1);
+    Storage.saveDebts();
+    render();
+  }
+
+  function _add() {
+    const name    = document.getElementById('dn').value.trim();
+    const balance = parseFloat(document.getElementById('db').value) || 0;
+    const min     = parseFloat(document.getElementById('dmin').value) || 0;
+    const rate    = parseFloat(document.getElementById('dr').value) || 0;
+    if (!name) { showMsg('d-msg', 'Enter an account name.', 'err'); return; }
+
+    const ex = window.DEBTS.find(d => d.name.toLowerCase() === name.toLowerCase());
+    if (ex) { ex.balance = balance; ex.min = min; ex.rate = rate; }
+    else    { window.DEBTS.push({ name, balance, min, rate }); }
+
+    Storage.saveDebts();
+    render();
+    showMsg('d-msg', 'Debt saved.', 'ok');
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-debt');
+    el.innerHTML = `
+      <div class="metrics" id="debt-metrics"></div>
+      <div class="grid2">
+        <div>
+          <div class="card"><h3>Accounts</h3><div id="debt-list"></div></div>
+          <div class="card">
+            <h3>Payoff Calculator</h3>
+            <div class="fr fr2" style="margin-bottom:8px">
+              <div><label>Extra Payment / Mo ($)</label>
+                <input type="number" id="debt-extra" value="0" oninput="Debt.render()"></div>
+              <div><label>Strategy</label>
+                <select id="debt-strat" onchange="Debt.render()">
+                  <option value="avalanche">Avalanche (highest APR first)</option>
+                  <option value="snowball">Snowball (lowest balance first)</option>
+                </select></div>
+            </div>
+            <div id="debt-calc-out"></div>
+          </div>
+          <div class="card">
+            <h3>Add / Update Debt</h3>
+            <div class="fr fr4" style="margin-bottom:10px">
+              <div><label>Name</label><input type="text" id="dn" placeholder="Credit Card"></div>
+              <div><label>Balance ($)</label><input type="number" id="db" placeholder="6493"></div>
+              <div><label>Min Pmt ($)</label><input type="number" id="dmin" placeholder="130"></div>
+              <div><label>APR %</label><input type="number" id="dr" placeholder="19.99"></div>
+            </div>
+            <button class="btn btn-primary" onclick="Debt._add()">Save Debt</button>
+            <div id="d-msg"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Payoff Projection</h3>
+            <div class="chart-wrap" style="height:320px"><canvas id="c-debt"></canvas></div>
+          </div>
+        </div>
+      </div>
+    `;
+    render();
+  }
+
+  return { mount, render, _delete, _add };
+})();
+// ─── Invest Tab ───────────────────────────────────────────────────────────────
+const Invest = (() => {
+  const AC = ['#4f8ef7','#34c98a','#f5a623','#a78bfa','#f87171','#fb923c'];
+  let CH = {};
+  function kc(id) { if (CH[id]) { CH[id].destroy(); delete CH[id]; } }
+
+  function render() {
+    const contrib = parseFloat(document.getElementById('inv-contrib')?.value) || 0;
+    const rate    = parseFloat(document.getElementById('inv-rate')?.value)    || 7;
+    const yrs     = parseInt(document.getElementById('inv-yrs')?.value)       || 25;
+    const invs    = window.INVS || [];
+    const totBal  = invs.reduce((s, i) => s + (i.balance||0), 0);
+    const totC    = invs.reduce((s, i) => s + (i.contrib||0), 0);
+    const totGoal = invs.reduce((s, i) => s + (i.goal||0), 0);
+    const totYTD  = invs.reduce((s, i) => s + (i.ytdContrib||0), 0);
+
+    document.getElementById('inv-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Total Invested</div><div class="val pos">${fmt(totBal)}</div></div>
+      <div class="metric"><div class="lbl">Monthly Target</div><div class="val">${fmt(totC)}</div></div>
+      <div class="metric"><div class="lbl">Annual Goal</div><div class="val">${fmt(totGoal)}</div></div>
+      <div class="metric"><div class="lbl">YTD Contributed</div>
+        <div class="val ${totGoal>0&&totYTD>=totGoal?'pos':'warn'}">${fmt(totYTD)}</div></div>
+    `;
+
+    document.getElementById('inv-list').innerHTML = invs.length ? invs.map((inv, i) => {
+      const goalPct  = inv.goal > 0 ? Math.min(inv.ytdContrib / inv.goal, 1) : 0;
+      const goalCls  = goalPct >= 1 ? 'fill-ok' : goalPct > 0.5 ? 'fill-warn' : 'fill-blue';
+      const diff     = (inv.goal||0) - (inv.ytdContrib||0);
+      return `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:500">${escHtml(inv.name)}</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="pos" style="font-size:13px;font-weight:500">${fmt(inv.balance)}</span>
+            <button class="btn btn-sm" onclick="Invest._edit(${i})" style="font-size:10px;padding:2px 7px">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="Invest._delete(${i})" style="font-size:10px">✕</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;font-size:11px;color:var(--muted);margin-bottom:6px">
+          <span>Type: ${escHtml(inv.type)}</span>
+          <span>Monthly target: ${fmt(inv.contrib)}</span>
+          <span>Annual goal: ${fmt(inv.goal||0)}</span>
+          <span>YTD actual: <strong style="color:${diff<=0?'var(--green)':'var(--text)'}">${fmt(inv.ytdContrib||0)}</strong></span>
+        </div>
+        ${inv.goal > 0 ? `
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="bar" style="flex:1;height:5px">
+            <div class="fill ${goalCls}" style="width:${(goalPct*100).toFixed(0)}%"></div>
+          </div>
+          <span style="font-size:10px;color:var(--muted);white-space:nowrap">
+            ${Math.round(goalPct*100)}% of annual goal
+            ${diff > 0 ? `· ${fmt(diff)} remaining` : '· <span style="color:var(--green)">Goal met ✓</span>'}
+          </span>
+        </div>` : ''}
+      </div>`;
+    }).join('') : '<p class="muted" style="font-size:12px;padding:6px 0">No accounts yet. Add one below.</p>';
+
+    // Allocation donut
+    kc('c-alloc');
+    CH['c-alloc'] = new Chart(document.getElementById('c-alloc'), {
+      type: 'doughnut',
+      data: {
+        labels: invs.map(i => i.name),
+        datasets: [{ data: invs.map(i => i.balance || 0.01), backgroundColor: AC, borderWidth: 0 }]
+      },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'60%',
+        plugins: { legend: { position:'bottom', labels:{ font:{size:10}, boxWidth:8, padding:6, color:'#7b82a0' } } } }
+    });
+
+    // Goal vs actual bar chart
+    kc('c-inv-goals');
+    if (invs.length) {
+      CH['c-inv-goals'] = new Chart(document.getElementById('c-inv-goals'), {
+        type: 'bar',
+        data: {
+          labels: invs.map(i => i.name.length > 12 ? i.name.slice(0,12)+'…' : i.name),
+          datasets: [
+            { label:'YTD Actual',  data: invs.map(i => i.ytdContrib||0), backgroundColor:'#34c98a', borderWidth:0, borderRadius:3 },
+            { label:'Annual Goal', data: invs.map(i => i.goal||0), backgroundColor:'rgba(79,142,247,0.25)', borderWidth:0, borderRadius:3 },
+          ]
+        },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ position:'bottom', labels:{ font:{size:10}, boxWidth:8, padding:6, color:'#7b82a0' } } },
+          scales:{
+            y:{ ticks:{callback:v=>'$'+Math.round(v/1000)+'k',font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'} },
+            x:{ ticks:{font:{size:10}}, grid:{display:false} }
+          }
+        }
+      });
+    }
+
+    // Growth projection
+    const gL=[], gP=[], gT=[];
+    let bal = totBal, contributed = totBal;
+    for (let y=0; y<=yrs; y++) {
+      gL.push(y===0?'Now':'Yr '+y);
+      gP.push(Math.round(contributed));
+      gT.push(Math.round(bal));
+      bal = bal*(1+rate/100)+contrib*12;
+      contributed += contrib*12;
+    }
+    const fv=gT[gT.length-1], fp=gP[gP.length-1];
+    document.getElementById('inv-proj').innerHTML =
+      `Projected in <strong>${yrs} years</strong>: <span class="pos" style="font-weight:500">${fmt(fv)}</span>
+       &nbsp;·&nbsp; contributions: ${fmt(fp)} &nbsp;·&nbsp; growth: <span class="pos">${fmt(fv-fp)}</span>`;
+
+    kc('c-growth');
+    CH['c-growth'] = new Chart(document.getElementById('c-growth'), {
+      type:'line',
+      data:{ labels:gL, datasets:[
+        { label:'Portfolio Value', data:gT, borderColor:'#4f8ef7', backgroundColor:'rgba(79,142,247,0.08)',
+          tension:0.35, borderWidth:1.5, pointRadius:0, fill:true },
+        { label:'Contributions',  data:gP, borderColor:'rgba(52,201,138,0.5)', backgroundColor:'transparent',
+          tension:0.35, borderWidth:1, pointRadius:0, borderDash:[4,3] },
+      ]},
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{
+          y:{ ticks:{callback:v=>'$'+Math.round(v/1000)+'k',font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'} },
+          x:{ ticks:{maxTicksLimit:8,font:{size:10}}, grid:{display:false} }
+        }
+      }
+    });
+  }
+
+  function _delete(i) {
+    if (!confirm(`Remove "${window.INVS[i].name}"?`)) return;
+    window.INVS.splice(i, 1);
+    Storage.saveInvs(); render();
+  }
+
+  function _fillForm(inv) {
+    document.getElementById('ian').value  = inv.name    || '';
+    document.getElementById('iab').value  = inv.balance || 0;
+    document.getElementById('iac').value  = inv.contrib || 0;
+    document.getElementById('iag').value  = inv.goal    || 0;
+    document.getElementById('iaytd').value= inv.ytdContrib || 0;
+    document.getElementById('iat').value  = inv.type    || 'Retirement (401k/IRA)';
+  }
+
+  function _edit(i) {
+    _fillForm(window.INVS[i]);
+    document.getElementById('ian').focus();
+    toast('Edit account details below and click Save.', 'info');
+  }
+
+  function _add() {
+    const name    = document.getElementById('ian').value.trim();
+    const balance = parseFloat(document.getElementById('iab').value)   || 0;
+    const contrib = parseFloat(document.getElementById('iac').value)   || 0;
+    const goal    = parseFloat(document.getElementById('iag').value)   || 0;
+    const ytd     = parseFloat(document.getElementById('iaytd').value) || 0;
+    const type    = document.getElementById('iat').value;
+    if (!name) { showMsg('i-msg','Enter an account name.','err'); return; }
+
+    const ex = window.INVS.find(i => i.name.toLowerCase() === name.toLowerCase());
+    if (ex) { Object.assign(ex, { balance, contrib, goal, ytdContrib:ytd, type }); }
+    else    { window.INVS.push({ name, balance, contrib, goal, ytdContrib:ytd, type }); }
+
+    Storage.saveInvs(); render();
+    showMsg('i-msg','Account saved.','ok');
+    ['ian','iab','iac','iag','iaytd'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-invest');
+    const typeOpts = ['Retirement (401k/IRA)','Taxable Brokerage','Cryptocurrency','HSA','529 / Education']
+      .map(t=>`<option>${t}</option>`).join('');
+    el.innerHTML = `
+      <div class="metrics" id="inv-metrics"></div>
+      <div class="grid2">
+        <div>
+          <div class="card"><h3>Accounts &amp; Goals</h3><div id="inv-list"></div></div>
+          <div class="card">
+            <h3>Add / Update Account</h3>
+            <div class="fr fr3" style="margin-bottom:8px">
+              <div><label>Account Name</label><input type="text" id="ian" placeholder="Roth IRA"></div>
+              <div><label>Current Balance ($)</label><input type="number" id="iab" placeholder="0"></div>
+              <div><label>Monthly Target ($)</label><input type="number" id="iac" placeholder="500"></div>
+            </div>
+            <div class="fr fr3" style="margin-bottom:10px">
+              <div><label>Annual Goal ($)</label><input type="number" id="iag" placeholder="7000"></div>
+              <div><label>YTD Actual Contributed ($)</label><input type="number" id="iaytd" placeholder="0"></div>
+              <div><label>Type</label><select id="iat">${typeOpts}</select></div>
+            </div>
+            <button class="btn btn-primary" onclick="Invest._add()">Save Account</button>
+            <div id="i-msg"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Goal vs Actual (YTD)</h3>
+            <div class="chart-wrap" style="height:170px"><canvas id="c-inv-goals"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Allocation by Balance</h3>
+            <div class="chart-wrap" style="height:155px"><canvas id="c-alloc"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Long-Term Growth Projection</h3>
+            <div class="fr fr3" style="margin-bottom:10px">
+              <div><label>Monthly Contribution ($)</label>
+                <input type="number" id="inv-contrib" value="500" oninput="Invest.render()"></div>
+              <div><label>Expected Return (% / yr)</label>
+                <input type="number" id="inv-rate" value="7" oninput="Invest.render()"></div>
+              <div><label>Years</label>
+                <input type="number" id="inv-yrs" value="25" oninput="Invest.render()"></div>
+            </div>
+            <div class="chart-wrap" style="height:160px"><canvas id="c-growth"></canvas></div>
+            <div id="inv-proj" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    render();
+  }
+
+  return { mount, render, _delete, _edit, _add };
+})();
+// ─── House Projects Tab ───────────────────────────────────────────────────────
+const House = (() => {
+  function statusBadge(p) {
+    const r = p.quote > 0 ? p.saved / p.quote : 0;
+    if (p.quote === 0)  return '<span class="tag">No quote</span>';
+    if (r >= 1)         return '<span class="tag tag-learned">Funded ✓</span>';
+    if (p.saved > 0)    return '<span class="tag tag-custom">Saving…</span>';
+    return '<span class="tag">Pending</span>';
+  }
+
+  function render() {
+    const projs = window.PROJS || [];
+    const totQ  = projs.reduce((s, p) => s + (p.quote    || 0), 0);
+    const totS  = projs.reduce((s, p) => s + (p.saved    || 0), 0);
+    const totB  = projs.reduce((s, p) => s + (p.budgeted || 0), 0);
+
+    document.getElementById('house-metrics').innerHTML = `
+      <div class="metric"><div class="lbl">Total Quoted</div><div class="val">${fmt(totQ)}</div></div>
+      <div class="metric"><div class="lbl">Total Budgeted</div><div class="val">${fmt(totB)}</div></div>
+      <div class="metric"><div class="lbl">Total Saved</div><div class="val pos">${fmt(totS)}</div></div>
+      <div class="metric"><div class="lbl">Still Needed</div><div class="val warn">${fmt(Math.max(0, totQ - totS))}</div></div>
+    `;
+
+    document.getElementById('house-body').innerHTML = projs.map((p, i) => {
+      const r   = p.quote > 0 ? Math.min(p.saved / p.quote, 1) : 0;
+      const cls = r >= 1 ? 'fill-ok' : r > 0.5 ? 'fill-warn' : 'fill-blue';
+      return `<tr>
+        <td title="${escHtml(p.name)}">${escHtml(p.name)}</td>
+        <td title="${escHtml(p.vendor)}">${escHtml(p.vendor) || '—'}</td>
+        <td>${fmt(p.quote)}</td>
+        <td>${fmt(p.budgeted)}</td>
+        <td>
+          ${fmt(p.saved)}
+          <div class="bar" style="margin-top:2px">
+            <div class="fill ${cls}" style="width:${(r*100).toFixed(0)}%"></div>
+          </div>
+        </td>
+        <td>${escHtml(p.timeline) || '—'}</td>
+        <td>${statusBadge(p)}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="House._delete(${i})">✕</button>
+        </td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="8" style="padding:14px;color:var(--muted)">No projects yet.</td></tr>';
+  }
+
+  function _delete(i) {
+    if (!confirm(`Remove project "${window.PROJS[i].name}"?`)) return;
+    window.PROJS.splice(i, 1);
+    Storage.saveProjs();
+    render();
+  }
+
+  function _add() {
+    const name     = document.getElementById('hn').value.trim();
+    const vendor   = document.getElementById('hv').value.trim();
+    const quote    = parseFloat(document.getElementById('hq').value)  || 0;
+    const budgeted = parseFloat(document.getElementById('hb').value)  || 0;
+    const saved    = parseFloat(document.getElementById('hs').value)  || 0;
+    const timeline = document.getElementById('ht').value.trim();
+    if (!name) { showMsg('h-msg', 'Enter a project name.', 'err'); return; }
+
+    const ex = window.PROJS.find(p => p.name.toLowerCase() === name.toLowerCase());
+    if (ex) { Object.assign(ex, { vendor, quote, budgeted, saved, timeline }); }
+    else    { window.PROJS.push({ name, vendor, quote, budgeted, saved, timeline }); }
+
+    Storage.saveProjs();
+    render();
+    showMsg('h-msg', 'Project saved.', 'ok');
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-house');
+    el.innerHTML = `
+      <div class="metrics" id="house-metrics"></div>
+      <div class="card">
+        <h3>Project Tracker</h3>
+        <div class="tbl-wrap">
+          <table class="tbl" style="table-layout:fixed">
+            <colgroup>
+              <col style="width:18%"><col style="width:14%"><col style="width:10%">
+              <col style="width:10%"><col style="width:16%"><col style="width:12%">
+              <col style="width:12%"><col style="width:8%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Project</th><th>Vendor</th><th>Quote</th>
+                <th>Budgeted</th><th>Saved</th><th>Timeline</th>
+                <th>Status</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="house-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Add / Update Project</h3>
+        <div class="fr fr3" style="margin-bottom:8px">
+          <div><label>Project Name</label><input type="text" id="hn" placeholder="Shower Door"></div>
+          <div><label>Vendor / Note</label><input type="text" id="hv" placeholder="ABC Contractors"></div>
+          <div><label>Quote ($)</label><input type="number" id="hq" placeholder="0"></div>
+        </div>
+        <div class="fr fr3" style="margin-bottom:10px">
+          <div><label>Budgeted ($)</label><input type="number" id="hb" placeholder="0"></div>
+          <div><label>Saved ($)</label><input type="number" id="hs" placeholder="0"></div>
+          <div><label>Timeline</label><input type="text" id="ht" placeholder="Q3 2026"></div>
+        </div>
+        <button class="btn btn-primary" onclick="House._add()">Save Project</button>
+        <div id="h-msg"></div>
+      </div>
+    `;
+    render();
+  }
+
+  return { mount, render, _delete, _add };
+})();
+// ─── Auto-Cat Rules Tab ───────────────────────────────────────────────────────
+const RulesTab = (() => {
+  function catOptions(selected) {
+    return CATS.map(c => `<option value="${c}"${c===selected?' selected':''}>${c}</option>`).join('');
+  }
+  function srcTag(src) {
+    const map = { 'built-in':'tag-builtin', learned:'tag-learned', custom:'tag-custom' };
+    return `<span class="tag ${map[src]||''}">${src}</span>`;
+  }
+
+  function render() {
+    const filter = (document.getElementById('rf')?.value || '').toLowerCase();
+    const srcF   = document.getElementById('rs')?.value || 'all';
+    const rows   = RULES.filter(r =>
+      (!filter || r.kw.includes(filter) || r.cat.toLowerCase().includes(filter)) &&
+      (srcF === 'all' || r.src === srcF)
+    ).slice(0, 120);
+
+    document.getElementById('rules-body').innerHTML = rows.map((r, visIdx) => {
+      const realIdx = RULES.indexOf(r);
+      return `<tr>
+        <td><code>${escHtml(r.kw)}</code></td>
+        <td style="font-size:12px">${escHtml(r.cat)}</td>
+        <td>${srcTag(r.src)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm" onclick="RulesTab._edit(${realIdx})"
+                  style="font-size:10px;padding:2px 7px">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="RulesTab._delete(${realIdx})"
+                  style="font-size:10px;padding:2px 6px;margin-left:3px">✕</button>
+        </td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="4" style="padding:12px;color:var(--muted)">No matching rules.</td></tr>';
+  }
+
+  function _edit(idx) {
+    const r = RULES[idx];
+    if (!r) return;
+    const newKw  = prompt('Keyword:', r.kw);
+    if (newKw === null) return;
+    const newCat = prompt('Category (exact name):\n' + CATS.join(', '), r.cat);
+    if (newCat === null || !CATS.includes(newCat)) {
+      alert('Category not recognised — no change made.'); return;
+    }
+    RULES[idx] = { kw: newKw.trim().toLowerCase(), cat: newCat, src: r.src === 'built-in' ? 'custom' : r.src };
+    Storage.saveRules();
+    render();
+    toast('Rule updated.', 'ok');
+  }
+
+  function _delete(idx) {
+    const r = RULES[idx];
+    if (!r) return;
+    if (!confirm(`Delete rule: "${r.kw}" → ${r.cat}?`)) return;
+    RULES.splice(idx, 1);
+    Storage.saveRules();
+    render();
+    toast('Rule deleted.', 'ok');
+  }
+
+  function _add() {
+    const kw  = document.getElementById('rk').value.trim().toLowerCase();
+    const cat = document.getElementById('rc').value;
+    if (!kw) { showMsg('r-msg', 'Enter a keyword.', 'err'); return; }
+    const existing = RULES.find(r => r.kw === kw);
+    if (existing) {
+      if (!confirm(`Keyword "${kw}" already maps to "${existing.cat}". Replace it?`)) return;
+      existing.cat = cat; existing.src = 'custom';
+    } else {
+      RULES.unshift({ kw, cat, src: 'custom' });
+    }
+    Storage.saveRules();
+    render();
+    showMsg('r-msg', 'Rule saved.', 'ok');
+    document.getElementById('rk').value = '';
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-rules');
+    el.innerHTML = `
+      <div class="card">
+        <h3>Auto-Categorization Rules</h3>
+        <p class="sheets-info" style="margin-bottom:10px;line-height:1.7">
+          Keywords match merchant descriptions (case-insensitive, partial). First match wins.
+          Learned and custom rules run before built-in. You can <strong>edit or delete any rule</strong>
+          including built-ins (edited built-ins become custom). Corrections in Import auto-add learned rules.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:11px">
+          <span class="tag tag-builtin">built-in</span>
+          <span class="tag tag-learned">learned (auto from corrections)</span>
+          <span class="tag tag-custom">custom</span>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:flex-end">
+          <div style="flex:1"><label>Search</label>
+            <input type="text" id="rf" placeholder="e.g. publix, income…" oninput="RulesTab.render()"></div>
+          <div><label>Source</label>
+            <select id="rs" onchange="RulesTab.render()" style="width:auto">
+              <option value="all">All</option>
+              <option value="built-in">Built-in</option>
+              <option value="learned">Learned</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl" style="table-layout:fixed">
+            <colgroup>
+              <col style="width:35%"><col style="width:33%"><col style="width:16%"><col style="width:16%">
+            </colgroup>
+            <thead><tr><th>Keyword</th><th>Category</th><th>Source</th><th>Actions</th></tr></thead>
+            <tbody id="rules-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Add / Override Rule</h3>
+        <div class="fr fr2" style="margin-bottom:10px">
+          <div><label>Keyword (partial match)</label>
+            <input type="text" id="rk" placeholder="e.g. publix, usaa life"></div>
+          <div><label>Category</label>
+            <select id="rc">${catOptions(CATS[0])}</select></div>
+        </div>
+        <button class="btn btn-primary" onclick="RulesTab._add()">Save Rule</button>
+        <div id="r-msg"></div>
+      </div>
+    `;
+    render();
+  }
+
+  return { mount, render, _edit, _delete, _add };
+})();
+// ─── Export & Records Tab (replaces Google Sheets dependency) ─────────────────
+const SheetsTab = (() => {
+
+  function yearOpts() {
+    const y = new Date().getFullYear();
+    return [y-1, y, y+1].map(yr =>
+      `<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`
+    ).join('');
+  }
+
+  function getYear() {
+    return parseInt(document.getElementById('exp-year').value) || new Date().getFullYear();
+  }
+
+  function exportTxnCSV()  { Storage.exportTransactionsCSV(getYear()); }
+  function exportBudCSV()  { Storage.exportBudgetCSV(getYear()); }
+  function exportJSON()    { Storage.exportJSON(getYear()); }
+
+  function exportAll() {
+    const y = getYear();
+    Storage.exportTransactionsCSV(y);
+    setTimeout(() => Storage.exportBudgetCSV(y),    400);
+    setTimeout(() => Storage.exportJSON(y),          800);
+    showMsg('exp-msg', `All three files downloading for ${y}.`, 'ok');
+  }
+
+  async function yearEnd() {
+    const year = getYear();
+
+    const step1 = confirm(
+      `YEAR-END EXPORT & RESET — ${year}\n\n` +
+      `This will:\n` +
+      `  1. Download transactions as CSV\n` +
+      `  2. Download budget summary as CSV\n` +
+      `  3. Download a full JSON backup\n` +
+      `  4. Clear all ${year} transaction data\n\n` +
+      `Make sure your downloads folder is accessible.\n\n` +
+      `Continue?`
+    );
+    if (!step1) return;
+
+    Storage.exportTransactionsCSV(year);
+    setTimeout(() => Storage.exportBudgetCSV(year), 400);
+    setTimeout(() => Storage.exportJSON(year),       800);
+
+    setTimeout(() => {
+      const step2 = confirm(
+        `Three files are downloading.\n\n` +
+        `Once you've confirmed they saved correctly, click OK to clear ${year} data.\n` +
+        `Click Cancel to keep the data (you can purge manually later).`
+      );
+      if (step2) {
+        Storage.purgeYear(year);
+        showMsg('exp-msg', `${year} cleared. App is ready for ${year+1}.`, 'ok');
+      } else {
+        showMsg('exp-msg', 'Purge cancelled — your data is safe.', 'warn');
+      }
+    }, 1500);
+  }
+
+  function mount() {
+    const el = document.getElementById('tab-sheets');
+    el.innerHTML = `
+      <div class="card">
+        <h3>Export & Download Records</h3>
+        <p class="sheets-info" style="margin-bottom:14px;line-height:1.8">
+          All your data is stored locally in your browser. Use these exports to save records
+          to your computer, open them in Excel or Google Sheets, or keep them as backups.
+          No account or setup required.
+        </p>
+        <div style="margin-bottom:14px">
+          <label>Year</label>
+          <select id="exp-year" style="width:auto">${yearOpts()}</select>
+        </div>
+        <div class="btn-group" style="flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="SheetsTab.exportAll()">
+            Download All (CSV + JSON)
+          </button>
+          <button class="btn" onclick="SheetsTab.exportTxnCSV()">
+            Transactions CSV
+          </button>
+          <button class="btn" onclick="SheetsTab.exportBudCSV()">
+            Budget Summary CSV
+          </button>
+          <button class="btn" onclick="SheetsTab.exportJSON()">
+            Full JSON Backup
+          </button>
+        </div>
+        <div id="exp-msg"></div>
+      </div>
+
+      <div class="card">
+        <h3>Opening in Excel or Google Sheets</h3>
+        <p class="sheets-info" style="line-height:1.8">
+          <strong>Excel:</strong> Open Excel → File → Open → select the downloaded CSV.<br>
+          <strong>Google Sheets:</strong> Go to
+          <a href="https://sheets.google.com" target="_blank">sheets.google.com</a>
+          → New → Import → Upload the CSV file.<br>
+          <strong>JSON backup:</strong> Can be re-imported into this app in the future
+          if you ever need to restore data.
+        </p>
+      </div>
+
+      <div class="card year-purge-zone">
+        <h3>⚠ Year-End Export &amp; Reset</h3>
+        <p class="sheets-info" style="margin-bottom:14px;line-height:1.7">
+          At the end of each year: downloads all your records as CSV and JSON,
+          then clears the year's transactions so you start fresh.
+          <strong>You will be prompted twice before anything is deleted.</strong>
+          Make sure downloads complete before confirming the reset.
+        </p>
+        <div style="margin-bottom:12px">
+          <label>Year to close out</label>
+          <select id="exp-year-purge" style="width:auto">${yearOpts()}</select>
+        </div>
+        <button class="btn btn-danger" onclick="SheetsTab.yearEnd()"
+                style="border-color:var(--red);color:var(--red)">
+          Export &amp; Reset Year
+        </button>
+        <div id="purge-msg"></div>
+      </div>
+    `;
+  }
+
+  return { mount, exportTxnCSV, exportBudCSV, exportJSON, exportAll, yearEnd };
+})();
+// ─── Utilities ────────────────────────────────────────────────────────────────
+function fmt(n) {
+  if (n == null || isNaN(n)) return '$0';
+  return (n < 0 ? '-$' : '$') +
+    Math.abs(n).toLocaleString('en-US', { minimumFractionDigits:0, maximumFractionDigits:2 });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+  setTimeout(() => { if (el) el.innerHTML = ''; }, 4000);
+}
+
+let _toastTimer;
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show alert-${type}`;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ─── Tab Router ───────────────────────────────────────────────────────────────
+const TABS = {
+  dashboard: Dashboard,
+  import:    Import,
+  budget:    Budget,
+  goals:     Goals,
+  debt:      Debt,
+  invest:    Invest,
+  house:     House,
+  rules:     RulesTab,
+  sheets:    SheetsTab,
+};
+
+let _mounted = {};
+
+function go(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('#nav button').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + name).classList.add('on');
+  const btn = document.querySelector(`#nav button[data-tab="${name}"]`);
+  if (btn) btn.classList.add('on');
+  const mod = TABS[name];
+  if (!mod) return;
+  if (!_mounted[name]) {
+    mod.mount();
+    _mounted[name] = true;
+  } else if (mod.render) {
+    mod.render();
+  }
+}
+
+// ─── Nav wiring ───────────────────────────────────────────────────────────────
+document.querySelectorAll('#nav button[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => go(btn.dataset.tab));
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+(function init() {
+  Storage.load();
+  go('dashboard');
+})();
+
+// ─── PWA Service Worker (inline, enables Add to Home Screen) ──────────────────
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'kline-crew-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./')))
+      );
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+  </script>
+</body>
+</html>
